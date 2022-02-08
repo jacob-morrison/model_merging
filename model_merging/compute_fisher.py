@@ -6,9 +6,9 @@ from absl import flags
 from absl import logging
 from transformers import TFAutoModelForSequenceClassification, AutoTokenizer
 
-from model_merging import data
-from model_merging import fisher
-from model_merging import hdf5_util
+import data
+import fisher
+import hdf5_util
 
 FLAGS = flags.FLAGS
 

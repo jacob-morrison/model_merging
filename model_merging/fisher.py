@@ -1,6 +1,6 @@
 """Code for computing and storing Fishers."""
 import tensorflow as tf
-from model_merging import hf_util
+import hf_util
 
 
 def _batch_size(batch):

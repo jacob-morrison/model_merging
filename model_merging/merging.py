@@ -4,8 +4,8 @@ from typing import Optional, Sequence
 import datasets as hfds
 import tensorflow as tf
 import tensorflow_probability as tfp
-from model_merging import hf_util
-from model_merging import evaluation
+import hf_util
+import evaluation
 
 MergeResult = collections.namedtuple("MergeResult", ["coefficients", "score"])
 
