@@ -7,10 +7,10 @@ from torch.utils.tensorboard import SummaryWriter
 writer=SummaryWriter('content/logsdir')
 
 # roberta_tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
-# roberta_model = RobertaModel.from_pretrained('roberta-base')
+roberta_model = RobertaModel.from_pretrained('roberta-base')
 
-# roberta_layer = roberta_model.encoder.layer[0]
-# print(roberta_layer)
+roberta_layer = roberta_model.encoder.layer[0]
+print(roberta_layer)
 
 # summary(roberta_layer, input_size=(1,768))
 dummy_input = torch.rand(1, 10, 768)
@@ -37,7 +37,7 @@ image = Image.open(requests.get(url, stream=True).raw)
 
 feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
 inputs = feature_extractor(images=image, return_tensors="pt")
-print(inputs)
+# print(inputs)
 
 # vit_layer = vit_model.encoder.layer[0]
 # writer.add_graph(vit_layer, dummy_input)
