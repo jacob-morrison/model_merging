@@ -6,7 +6,7 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 
 roberta_mnli_model = RobertaModel.from_pretrained('roberta-large-mnli')
-roberta_xlm_model = RobertaModel.from_pretrained('XLM-RoBERTa')
+roberta_xlm_model = RobertaModel.from_pretrained('xlm-roberta-large')
 
 
 # writer=SummaryWriter('content/logsdir')
