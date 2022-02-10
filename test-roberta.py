@@ -4,16 +4,20 @@ import requests
 from torchsummary import summary
 import torch
 from torch.utils.tensorboard import SummaryWriter
-writer=SummaryWriter('content/logsdir')
 
+roberta_mnli_model = RobertaModel.from_pretrained('roberta-large-mnli')
+roberta_xlm_model = RobertaModel.from_pretrained('XLM-RoBERTa')
+
+
+# writer=SummaryWriter('content/logsdir')
 # roberta_tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
-roberta_model = RobertaModel.from_pretrained('roberta-base')
+# roberta_model = RobertaModel.from_pretrained('roberta-base')
 
-roberta_layer = roberta_model.encoder.layer[0]
-print(roberta_layer)
+# roberta_layer = roberta_model.encoder.layer[0]
+# print(roberta_layer)
 
 # summary(roberta_layer, input_size=(1,768))
-dummy_input = torch.rand(1, 10, 768)
+# dummy_input = torch.rand(1, 10, 768)
 # writer.add_graph(roberta_layer, dummy_input)
 # writer.close()
 
@@ -30,13 +34,13 @@ dummy_input = torch.rand(1, 10, 768)
 #         print(param.data.size())
 #         roberta_params.add(name)
 
-vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
+# vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
 
-url = 'http://images.cocodataset.org/val2017/000000039769.jpg'
-image = Image.open(requests.get(url, stream=True).raw)
+# url = 'http://images.cocodataset.org/val2017/000000039769.jpg'
+# image = Image.open(requests.get(url, stream=True).raw)
 
-feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
-inputs = feature_extractor(images=image, return_tensors="pt")
+# feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224-in21k')
+# inputs = feature_extractor(images=image, return_tensors="pt")
 # print(inputs)
 
 # vit_layer = vit_model.encoder.layer[0]
