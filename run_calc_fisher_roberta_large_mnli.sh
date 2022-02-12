@@ -24,4 +24,4 @@ unset __conda_setup
 conda activate merge-models
 nvidia-smi
 cd jacob/merge-vl/model_merging
-python3 compute_fisher.py --model roberta-large-mnli --fisher_path ../fishers/ --glue_task mnli 
+python3 compute_fisher.py --model roberta-large-mnli --fisher_path ../fishers/mnli-1.hdf5 --glue_task mnli 
