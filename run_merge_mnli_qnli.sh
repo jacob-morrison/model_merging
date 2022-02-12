@@ -23,4 +23,4 @@ unset __conda_setup
 
 conda activate merge-models
 nvidia-smi
-python3 merge_and_evaluate.py --models roberta-large-mnli,roberta-large-qnli --fishers ../fishers/mnli-1.hdf5,../fishers/qnli-1.hdf5 --glue_task mnli 
+python3 merge_and_evaluate.py --models roberta-large-mnli,howey/roberta-large-qnli --fishers ../fishers/mnli-1.hdf5,../fishers/qnli-1.hdf5 --glue_task mnli 
