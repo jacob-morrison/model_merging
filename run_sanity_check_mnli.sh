@@ -22,5 +22,7 @@ fi
 unset __conda_setup
 
 conda activate merge-models
+module load cuda/11.2
+module load cudnn/8.1
 nvidia-smi
 python3 merge_and_evaluate.py --models roberta-large-mnli,roberta-large-mnli --fishers ../fishers/mnli-1.hdf5,../fishers/mnli-1.hdf5 --glue_task mnli 
