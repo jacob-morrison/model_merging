@@ -9,8 +9,6 @@ def load_metric_for_glue_task(task: str):
 
 def evaluate_model(model, dataset: tf.data.Dataset, metric: hfds.Metric):
     for model_input, gold_references in dataset:
-        print('model input:')
-        print(model_input)
         model_predictions = model(model_input).logits
         model_predictions = tf.argmax(model_predictions, axis=-1)
         print('model predictions:')
