@@ -64,18 +64,17 @@ for i in range(10):
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
     elif MODEL == 'BERT':
-        inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'] + ' [SEP] ') # Doesn't work
+        inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
     
 
 results = classifier(inputs)
+correct_count = 0
 for i in range(len(results)):
     results[i]['prediction'] = labels[i]
-pprint(labels)
-pprint(results)
-correct_count = 0
-for i in range(len(labels)):
-    if labels[i] == results[i]['label']:
+    if results[i]['label'] == results[i]['prediction']:
         correct_count += 1
+
+pprint(results)
 print(1. * correct_count / len(labels))
 
 # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
