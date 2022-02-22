@@ -55,7 +55,7 @@ for i in range(10):
     # RoBERTa:
     # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
     # BERT:
-    inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'])
+    inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'] + ' [SEP] ')
 
 results = classifier(inputs)
 print(labels)
@@ -65,3 +65,35 @@ for i in range(len(labels)):
     if labels[i] == results[i]['label']:
         correct_count += 1
 print(1. * correct_count / len(labels))
+
+# # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
+# # model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
+# tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
+# model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
+# classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
+
+# inputs = []
+# labels = []
+# dataset = load_dataset('glue', 'mnli_matched')
+# # for i in range(len(dataset['validation'])):
+# for i in range(10):
+#     row = dataset['validation'][i]
+#     # labels.append(convert_label(int(row['label'])))
+#     labels.append(convert_label_bert(int(row['label'])))
+#     # RoBERTa:
+#     # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
+#     # BERT:
+#     inputs.append((row['premise'], + row['hypothesis']))
+
+# for i in range(len(inputs)):
+#     premise, hypothesis = inputs[i]
+#     encoded_text = tokenizer.encode_plus((premise, hypothesis), return_tensors='pt')
+
+# results = classifier(inputs)
+# print(labels)
+# print(results)
+# correct_count = 0
+# for i in range(len(labels)):
+#     if labels[i] == results[i]['label']:
+#         correct_count += 1
+# print(1. * correct_count / len(labels))
