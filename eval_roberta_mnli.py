@@ -55,7 +55,7 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
+dataset = load_dataset('glue', 'mnli', split='validation_matched[:100]')
 for i in range(len(dataset)):
 # for i in range(100):
     row = dataset[i]
