@@ -23,11 +23,13 @@ model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
+labels = []
 dataset = load_dataset('glue', 'mnli_matched')
 print(dataset['validation'][0])
-for premise, hypothesis, label, idx in dataset['validation'][:2]:
-    print(label)
-    inputs.append(premise + ' </s></s> ' + hypothesis)
+for row in dataset['validation'][:2]:
+    labels.append(int(row['label']))
+    inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
 
 results = classifier(inputs)
+print(labels)
 print(results)
