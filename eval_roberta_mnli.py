@@ -18,6 +18,16 @@ import torch
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
+def convert_label(label):
+    if label == 0:
+        return 'ENTAILMENT'
+    elif label == 1:
+        return 'NEUTRAL'
+    elif label == 2:
+        return 'CONTRADICTION'
+    else:
+        return 'WTF'
+
 tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
@@ -25,11 +35,17 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 inputs = []
 labels = []
 dataset = load_dataset('glue', 'mnli_matched')
-for i in range(len(dataset['validation'])):
+# for i in range(len(dataset['validation'])):
+for i in range(10):
     row = dataset['validation'][i]
-    labels.append(int(row['label']))
+    labels.append(convert_label(int(row['label'])))
     inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
 
 results = classifier(inputs)
 print(labels)
 print(results)
+correct_count = 0
+for i in range(len(labels)):
+    if labels[i] == results[i]['label']:
+        correct_count += 1
+print(1. * correct_count / len(labels))
