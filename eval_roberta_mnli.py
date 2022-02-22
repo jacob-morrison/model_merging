@@ -32,7 +32,6 @@ for i in range(2):
     print(row)
     labels.append(int(row['label']))
     inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
-    break
 
 results = classifier(inputs)
 print(labels)
