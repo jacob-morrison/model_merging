@@ -54,7 +54,7 @@ inputs = []
 labels = []
 dataset = load_dataset('glue', 'mnli_matched')
 # for i in range(len(dataset['validation'])):
-for i in range(10):
+for i in range(100):
     row = dataset['validation'][i]
     if MODEL == 'RoBERTa':
         labels.append(convert_label(int(row['label'])))
