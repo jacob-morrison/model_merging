@@ -15,6 +15,7 @@
 #     break
 
 import torch
+from pprint import pprint
 from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline, Trainer
 
@@ -38,7 +39,7 @@ def convert_label_bert(label):
     else:
         return 'WTF'
 
-MODEL = 'BERT'
+MODEL = 'RoBERTa'
 
 if MODEL == 'RoBERTa':
     tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
@@ -67,8 +68,8 @@ for i in range(10):
     
 
 results = classifier(inputs)
-print(labels)
-print(results)
+pprint(labels)
+pprint(results)
 correct_count = 0
 for i in range(len(labels)):
     if labels[i] == results[i]['label']:
