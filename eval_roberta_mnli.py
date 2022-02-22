@@ -55,7 +55,7 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli', split='validation_matched[:100]')
+dataset = load_dataset('glue', 'mnli', split='validation_matched[:300]')
 for i in range(len(dataset)):
 # for i in range(100):
     row = dataset[i]
@@ -82,9 +82,10 @@ for i in range(len(results)):
     if results[i]['label'] == results[i]['prediction']:
         correct_count += 1
 
-pprint(prediction_counts)
 
 pprint(results)
+
+pprint(prediction_counts)
 print(1. * correct_count / len(labels))
 
 # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
