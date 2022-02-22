@@ -14,6 +14,8 @@
 #     logits = outputs.logits
 #     break
 
+import torch
+from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
 tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
@@ -21,6 +23,8 @@ model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
+dataset = load_dataset('glue', 'mnli_matched')
+print(dataset['validation'][0])
 for premise, hypothesis, label, idx in dataset['validation'][:2]:
     print(label)
     inputs.append(premise + ' </s></s> ' + hypothesis)
