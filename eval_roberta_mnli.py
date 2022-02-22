@@ -39,7 +39,7 @@ def convert_label_bert(label):
     else:
         return 'WTF'
 
-MODEL = 'RoBERTa'
+MODEL = 'BERT'
 
 if MODEL == 'RoBERTa':
     tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
@@ -62,7 +62,7 @@ for i in range(100):
         labels.append(convert_label_bert(int(row['label'])))
 
     if MODEL == 'RoBERTa':
-        inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
+        inputs.append(row['premise'] + ' ' + row['hypothesis']) # TODO: Should I include sep tokens?
     elif MODEL == 'BERT':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
     
