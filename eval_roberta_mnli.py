@@ -38,47 +38,62 @@ def convert_label_bert(label):
     else:
         return 'WTF'
 
-# # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
-# # model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
+MODEL = 'RoBERTa'
+
+if MODEL == 'RoBERTa':
+    tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
+    model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
+elif MODEL == 'BERT':
+    tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
+    model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
+
+classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
+
+inputs = []
+labels = []
+dataset = load_dataset('glue', 'mnli_matched')
+# for i in range(len(dataset['validation'])):
+for i in range(10):
+    row = dataset['validation'][i]
+    if MODEL == 'RoBERTa':
+        labels.append(convert_label(int(row['label'])))
+    elif MODEL == 'BERT':
+        labels.append(convert_label_bert(int(row['label'])))
+
+    if MODEL == 'RoBERTa':
+        inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
+    elif MODEL == 'BERT':
+        inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'] + ' [SEP] ') # Doesn't work
+    
+
+results = classifier(inputs)
+print(labels)
+print(results)
+correct_count = 0
+for i in range(len(labels)):
+    if labels[i] == results[i]['label']:
+        correct_count += 1
+print(1. * correct_count / len(labels))
+
+# tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
+# model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
+
+# def preprocess_function(examples):
+#     return tokenizer(examples["text"], truncation=True)
+
 # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
 # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
 # classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 # inputs = []
 # labels = []
-# dataset = load_dataset('glue', 'mnli_matched')
-# # for i in range(len(dataset['validation'])):
-# for i in range(10):
-#     row = dataset['validation'][i]
-#     # labels.append(convert_label(int(row['label'])))
-#     labels.append(convert_label_bert(int(row['label'])))
-#     # RoBERTa:
-#     # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
-#     # BERT:
-#     inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'] + ' [SEP] ')
+# dataset = load_dataset('glue', 'mnli_matched', split='validation[:32]')
 
-# results = classifier(inputs)
-# print(labels)
-# print(results)
-# correct_count = 0
-# for i in range(len(labels)):
-#     if labels[i] == results[i]['label']:
-#         correct_count += 1
-# print(1. * correct_count / len(labels))
+# tokenized_data = dataset.map(preprocess_function, batched=True)
 
-# tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
-# model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
-tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
-model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
-classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
-
-inputs = []
-labels = []
-dataset = load_dataset('glue', 'mnli_matched', split='validation[:10]')
-
-test_trainer = Trainer(model) 
-raw_pred, _, _ = test_trainer.predict(dataset)
-print(raw_pred)
+# test_trainer = Trainer(model) 
+# raw_pred, _, _ = test_trainer.predict(dataset)
+# print(raw_pred)
 
 # for i in range(len(dataset['validation'])):
 # for i in range(10):
