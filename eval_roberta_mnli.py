@@ -62,7 +62,7 @@ for i in range(100):
         labels.append(convert_label_bert(int(row['label'])))
 
     if MODEL == 'RoBERTa':
-        inputs.append(row['premise'] + ' ' + row['hypothesis'])
+        inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
     elif MODEL == 'BERT':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
     
