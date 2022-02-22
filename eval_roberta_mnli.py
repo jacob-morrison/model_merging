@@ -31,11 +31,14 @@ def convert_label(label):
 
 def convert_label_bert(label):
     if label == 0:
-        return 'LABEL_0'
-    elif label == 1:
+        # return 'LABEL_0'
         return 'LABEL_1'
-    elif label == 2:
+    elif label == 1:
+        # return 'LABEL_1'
         return 'LABEL_2'
+    elif label == 2:
+        # return 'LABEL_2'
+        return 'LABEL_0'
     else:
         return 'WTF'
 
