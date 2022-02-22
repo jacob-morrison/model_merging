@@ -26,7 +26,8 @@ inputs = []
 labels = []
 dataset = load_dataset('glue', 'mnli_matched')
 print(dataset['validation'][0])
-for row in dataset['validation']:
+for i in range(2):
+    row = dataset['validation'][i]
     print(row)
     labels.append(int(row['label']))
     inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
