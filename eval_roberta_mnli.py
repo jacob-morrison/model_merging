@@ -78,17 +78,25 @@ dataset = load_dataset('glue', 'mnli_matched')
 # for i in range(len(dataset['validation'])):
 for i in range(10):
     row = dataset['validation'][i]
-    labels.append(convert_label_bert(int(row['label'])))
+    # labels.append(convert_label_bert(int(row['label'])))
+    labels.append(int(row['label']))
     inputs.append((row['premise'], row['hypothesis']))
 
+correct_count = 0
 for i in range(len(inputs)):
+    gold_label = labels[i]
     premise, hypothesis = inputs[i]
     # Try with and without tuples?
     encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
     outputs = model(**encoded_text)
     # print(outputs.logits)
+    print(gold_label)
     print(torch.argmax(outputs.logits).item())
+    print()
+    if gold_label == torch.argmax(outputs.logits).item():
+        correct_count += 1
 
+print(1. * correct_count / len(labels))
 # results = classifier(inputs)
 # print(labels)
 # print(results)
