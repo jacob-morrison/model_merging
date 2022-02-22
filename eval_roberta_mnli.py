@@ -64,7 +64,7 @@ for i in range(10):
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
     elif MODEL == 'BERT':
-        inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
+        inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis']) # Doesn't work
     
 
 results = classifier(inputs)
