@@ -55,7 +55,7 @@ for i in range(10):
     # RoBERTa:
     # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
     # BERT:
-    inputs.append(row['premise'] + ' ' + row['hypothesis'])
+    inputs.append(row['premise'] + ' [SEP] ' + row['hypothesis'])
 
 results = classifier(inputs)
 print(labels)
