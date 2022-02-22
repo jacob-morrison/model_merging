@@ -68,7 +68,7 @@ for i in range(10):
     
 
 results = classifier(inputs)
-for i in results:
+for i in range(len(results)):
     results[i]['prediction'] = labels[i]
 pprint(labels)
 pprint(results)
