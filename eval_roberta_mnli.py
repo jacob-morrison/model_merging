@@ -18,4 +18,4 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipe
 
 tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
-classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
+classifier = pipeline("mnli", model=model, tokenizer=tokenizer)
