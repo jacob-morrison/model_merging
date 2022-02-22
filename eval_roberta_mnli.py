@@ -40,8 +40,8 @@ def convert_label_bert(label):
 
 # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 # model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
-tokenizer = AutoTokenizer.from_pretrained("ishan/bert-base-uncased-mnli")
-model = AutoModelForSequenceClassification.from_pretrained("ishan/bert-base-uncased-mnli")
+tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
+model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
