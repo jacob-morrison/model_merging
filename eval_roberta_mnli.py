@@ -16,7 +16,7 @@
 
 import torch
 from datasets import load_dataset
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline, Trainer
 
 def convert_label(label):
     if label == 0:
@@ -74,29 +74,36 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli_matched')
+dataset = load_dataset('glue', 'mnli_matched', split='validation[:10]')
+
+test_trainer = Trainer(model) 
+raw_pred, _, _ = test_trainer.predict(dataset)
+print(raw_pred)
+
 # for i in range(len(dataset['validation'])):
-for i in range(10):
-    row = dataset['validation'][i]
-    # labels.append(convert_label_bert(int(row['label'])))
-    labels.append(int(row['label']))
-    inputs.append((row['premise'], row['hypothesis']))
+# for i in range(10):
+#     row = dataset['validation'][i]
+#     # labels.append(convert_label_bert(int(row['label'])))
+#     labels.append(int(row['label']))
+#     inputs.append((row['premise'], row['hypothesis']))
 
-correct_count = 0
-for i in range(len(inputs)):
-    gold_label = labels[i]
-    premise, hypothesis = inputs[i]
-    # Try with and without tuples?
-    encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
-    outputs = model(**encoded_text)
-    # print(outputs.logits)
-    print(gold_label)
-    print(torch.argmax(outputs.logits).item())
-    print()
-    if gold_label == torch.argmax(outputs.logits).item():
-        correct_count += 1
+# correct_count = 0
+# for i in range(len(inputs)):
+#     gold_label = labels[i]
+#     premise, hypothesis = inputs[i]
+#     # Try with and without tuples?
+#     encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
+#     outputs = model(**encoded_text)
+#     # print(outputs.logits)
+#     print(gold_label)
+#     print(torch.argmax(outputs.logits).item())
+#     print()
+#     if gold_label == torch.argmax(outputs.logits).item():
+#         correct_count += 1
 
-print(1. * correct_count / len(labels))
+# print(1. * correct_count / len(labels))
+
+
 # results = classifier(inputs)
 # print(labels)
 # print(results)
