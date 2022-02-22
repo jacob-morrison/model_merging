@@ -68,6 +68,8 @@ for i in range(10):
     
 
 results = classifier(inputs)
+for i in results:
+    results[i]['prediction'] = labels[i]
 pprint(labels)
 pprint(results)
 correct_count = 0
