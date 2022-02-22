@@ -52,7 +52,10 @@ for i in range(10):
     row = dataset['validation'][i]
     # labels.append(convert_label(int(row['label'])))
     labels.append(convert_label_bert(int(row['label'])))
-    inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
+    # RoBERTa:
+    # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
+    # BERT:
+    inputs.append(row['premise'] + ' ' + row['hypothesis'])
 
 results = classifier(inputs)
 print(labels)
