@@ -87,7 +87,7 @@ for i in range(10):
 
 for i in range(len(inputs)):
     premise, hypothesis = inputs[i]
-    encoded_text = tokenizer.encode_plus((premise, hypothesis), return_tensors='pt')
+    encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
     outputs = model(**encoded_text)
     print(outputs.logits)
 
