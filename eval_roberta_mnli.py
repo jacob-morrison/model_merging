@@ -31,14 +31,14 @@ def convert_label(label):
 
 def convert_label_bert(label):
     if label == 0:
-        # return 'LABEL_0'
-        return 'LABEL_2'
-    elif label == 1:
-        # return 'LABEL_1'
         return 'LABEL_0'
-    elif label == 2:
         # return 'LABEL_2'
+    elif label == 1:
         return 'LABEL_1'
+        # return 'LABEL_0'
+    elif label == 2:
+        return 'LABEL_2'
+        # return 'LABEL_1'
     else:
         return 'WTF'
 
@@ -69,13 +69,20 @@ for i in range(len(dataset)):
     elif MODEL == 'BERT':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
     
-
+prediction_counts = {}
 results = classifier(inputs)
 correct_count = 0
 for i in range(len(results)):
     results[i]['prediction'] = labels[i]
+    if results[i]['label'] not in prediction_counts:
+        prediction_counts[results[i]['label']] = {}
+    if results[i]['prediction'] not in prediction_counts[results[i]['label']]:
+        prediction_counts[results[i]['label']][results[i]['prediction']] = 0
+    prediction_counts[results[i]['label']][results[i]['prediction']] += 1 
     if results[i]['label'] == results[i]['prediction']:
         correct_count += 1
+
+pprint(prediction_counts)
 
 pprint(results)
 print(1. * correct_count / len(labels))
