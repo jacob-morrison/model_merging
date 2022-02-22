@@ -35,8 +35,8 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 inputs = []
 labels = []
 dataset = load_dataset('glue', 'mnli_matched')
-# for i in range(len(dataset['validation'])):
-for i in range(10):
+for i in range(len(dataset['validation'])):
+# for i in range(10):
     row = dataset['validation'][i]
     labels.append(convert_label(int(row['label'])))
     inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
