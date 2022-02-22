@@ -39,7 +39,7 @@ def convert_label_bert(label):
     else:
         return 'WTF'
 
-MODEL = 'RoBERTa'
+MODEL = 'BERT'
 
 if MODEL == 'RoBERTa':
     tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
