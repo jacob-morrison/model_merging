@@ -86,8 +86,8 @@ for i in range(len(inputs)):
     # Try with and without tuples?
     encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
     outputs = model(**encoded_text)
-    print(outputs.logits)
-    print(torch.argmax(outputs.logits))
+    # print(outputs.logits)
+    print(torch.argmax(outputs.logits).item())
 
 # results = classifier(inputs)
 # print(labels)
