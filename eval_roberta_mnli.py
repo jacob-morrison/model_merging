@@ -19,3 +19,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipe
 tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
+
+inputs = []
+for premise, hypothesis, label, idx in dataset['validation'][:2]:
+    print(label)
+    inputs.append(premise + ' </s></s> ' + hypothesis)
+
+results = classifier(inputs)
+print(results)
