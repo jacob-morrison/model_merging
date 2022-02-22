@@ -31,18 +31,18 @@ def convert_label(label):
 
 def convert_label_bert(label):
     if label == 0:
-        # return 'LABEL_0'
-        return 'LABEL_1'
-    elif label == 1:
-        # return 'LABEL_1'
-        return 'LABEL_2'
-    elif label == 2:
-        # return 'LABEL_2'
         return 'LABEL_0'
+        # return 'LABEL_1'
+    elif label == 1:
+        return 'LABEL_1'
+        # return 'LABEL_2'
+    elif label == 2:
+        return 'LABEL_2'
+        # return 'LABEL_0'
     else:
         return 'WTF'
 
-MODEL = 'BERT'
+MODEL = 'RoBERTa'
 
 if MODEL == 'RoBERTa':
     tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
@@ -55,9 +55,9 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli_matched')
-# for i in range(len(dataset['validation'])):
-for i in range(100):
+dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
+for i in range(len(dataset)):
+# for i in range(100):
     row = dataset['validation'][i]
     if MODEL == 'RoBERTa':
         labels.append(convert_label(int(row['label'])))
