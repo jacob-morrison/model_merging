@@ -28,6 +28,16 @@ def convert_label(label):
     else:
         return 'WTF'
 
+def convert_label_bert(label):
+    if label == 0:
+        return 'LABEL_0'
+    elif label == 1:
+        return 'LABEL_1'
+    elif label == 2:
+        return 'LABEL_2'
+    else:
+        return 'WTF'
+
 # tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 # model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
 tokenizer = AutoTokenizer.from_pretrained("ishan/bert-base-uncased-mnli")
@@ -40,7 +50,8 @@ dataset = load_dataset('glue', 'mnli_matched')
 for i in range(len(dataset['validation'])):
 # for i in range(10):
     row = dataset['validation'][i]
-    labels.append(convert_label(int(row['label'])))
+    # labels.append(convert_label(int(row['label'])))
+    labels.append(convert_label_bert(int(row['label'])))
     inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
 
 results = classifier(inputs)
