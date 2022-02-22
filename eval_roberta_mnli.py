@@ -78,18 +78,16 @@ dataset = load_dataset('glue', 'mnli_matched')
 # for i in range(len(dataset['validation'])):
 for i in range(10):
     row = dataset['validation'][i]
-    # labels.append(convert_label(int(row['label'])))
     labels.append(convert_label_bert(int(row['label'])))
-    # RoBERTa:
-    # inputs.append(row['premise'] + ' </s></s> ' + row['hypothesis'])
-    # BERT:
     inputs.append((row['premise'], row['hypothesis']))
 
 for i in range(len(inputs)):
     premise, hypothesis = inputs[i]
+    # Try with and without tuples?
     encoded_text = tokenizer.encode_plus(premise, hypothesis, return_tensors='pt')
     outputs = model(**encoded_text)
     print(outputs.logits)
+    print(torch.argmax(outputs.logits))
 
 # results = classifier(inputs)
 # print(labels)
