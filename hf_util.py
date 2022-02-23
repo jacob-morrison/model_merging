@@ -6,27 +6,42 @@ from transformers import TFBertPreTrainedModel
 from transformers import TFRobertaPreTrainedModel
 
 
+# def get_body_and_head(
+#     model: Union[TFBertPreTrainedModel, TFRobertaPreTrainedModel]
+# ) -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
+#     body, *head = model.layers
+#     if not head:
+#         head = None
+#     elif len(head) > 1:
+#         raise ValueError(
+#             f"Expected model to have a single 'head' layer. Instead found {len(head)}. TODO: Support this."
+#         )
+#     else:
+#         head = head[0]
+#     return body, head
+
+
+# def get_body(model):
+#     return get_body_and_head(model)[0]
+
+
+# def get_mergeable_variables(model):
+#     return get_body_and_head(model)[0].trainable_variables
+
+# TODO: try this one because I don't think they ever use the head
 def get_body_and_head(
     model: Union[TFBertPreTrainedModel, TFRobertaPreTrainedModel]
 ) -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
     body, *head = model.layers
-    if not head:
-        head = None
-    elif len(head) > 1:
-        raise ValueError(
-            f"Expected model to have a single 'head' layer. Instead found {len(head)}. TODO: Support this."
-        )
-    else:
-        head = head[0]
-    return body, head
+    return body
 
 
 def get_body(model):
-    return get_body_and_head(model)[0]
+    return get_body_and_head(model)
 
 
 def get_mergeable_variables(model):
-    return get_body_and_head(model)[0].trainable_variables
+    return get_body_and_head(model).trainable_variables
 
 
 def clone_model(model):
