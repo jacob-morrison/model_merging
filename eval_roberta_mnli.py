@@ -61,7 +61,7 @@ elif MODEL == 'BERT':
 elif MODEL == 'CoLA':
     model = 'textattack/bert-base-uncased-CoLA'
 elif MODEL == 'QNLI':
-    model = 'textattack/bert-base-uncased-qnli'
+    model = 'textattack/bert-base-uncased-QNLI'
 
 tokenizer = AutoTokenizer.from_pretrained(model)
 model = AutoModelForSequenceClassification.from_pretrained(model)
