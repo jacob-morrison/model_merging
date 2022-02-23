@@ -80,14 +80,14 @@ def _convert_dataset_to_features(
             assert 0.0 <= label <= 5.0, f"Out of range STS-B label {label}."
             label = np.digitize(label, stsb_bins)
             label = tf.constant(label, dtype=tf.int64)
-        print(example.text_a)
-        print(example.text_b)
-        print(output_mode)
-        print(input_ids)
-        print(token_type_ids)
-        print(label)
-        print()
-        print(None.length)
+        # print(example.text_a)
+        # print(example.text_b)
+        # print(output_mode)
+        # print(input_ids)
+        # print(token_type_ids)
+        # print(label)
+        # print()
+        # print(None.length)
         return input_ids, token_type_ids, label
 
     def map_fn(example):
