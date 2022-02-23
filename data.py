@@ -121,7 +121,7 @@ def _convert_dataset_to_features(
         return tf_example, label
 
     dataset = dataset.map(map_fn)
-    # dataset = dataset.map(pad_fn)
+    dataset = dataset.map(pad_fn)
     return dataset
 
 
