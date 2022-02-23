@@ -112,7 +112,7 @@ def generate_merged_for_coeffs_set(
             normalization_constants=norm_constants,
         )
         yield coefficients, output_model
-        print(mergeable_models[0].encoder.layer[0])
+        print(mergeable_models[0].bert.encoder.layer[0])
         print(output_model.encoder.layer[0])
         break
 
