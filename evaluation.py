@@ -11,15 +11,15 @@ def load_metric_for_glue_task(task: str):
 
 def evaluate_model(model, dataset: tf.data.Dataset, metric: hfds.Metric):
     for model_input, gold_references in dataset:
-        print('model inputs:')
-        print(model_input)
         model_predictions = model(model_input).logits
         model_predictions = tf.argmax(model_predictions, axis=-1)
-        print('model predictions:')
-        print(model_predictions)
-        print('gold references:')
-        print(gold_references)
-        print()
+        # print('model inputs:')
+        # print(model_input)
+        # print('model predictions:')
+        # print(model_predictions)
+        # print('gold references:')
+        # print(gold_references)
+        # print()
         metric.add_batch(predictions=model_predictions, references=gold_references)
     return metric.compute()
 
