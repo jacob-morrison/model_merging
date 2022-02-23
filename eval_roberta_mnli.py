@@ -52,7 +52,7 @@ def convert_label_cola(label):
     else:
         return 'WTF'
 
-MODEL = 'QNLI'
+MODEL = 'SST2'
 
 if MODEL == 'RoBERTa':
     model = 'roberta-large-mnli'
@@ -62,6 +62,8 @@ elif MODEL == 'CoLA':
     model = 'textattack/bert-base-uncased-CoLA'
 elif MODEL == 'QNLI':
     model = 'textattack/bert-base-uncased-QNLI'
+elif MODEL == 'SST2':
+    model = 'textattack/bert-base-uncased-SST-2'
 
 tokenizer = AutoTokenizer.from_pretrained(model)
 model = AutoModelForSequenceClassification.from_pretrained(model)
@@ -75,6 +77,8 @@ elif MODEL == 'CoLA':
     dataset = load_dataset('glue', 'cola', split='validation')
 elif MODEL == 'QNLI':
     dataset = load_dataset('glue', 'qnli', split='validation')
+elif MODEL == 'SST2':
+    dataset = load_dataset('glue', 'sst2', split='validation')
 
 for i in range(len(dataset)):
     row = dataset[i]
@@ -82,19 +86,17 @@ for i in range(len(dataset)):
         labels.append(convert_label(int(row['label'])))
     elif MODEL == 'BERT':
         labels.append(convert_label_bert(int(row['label'])))
-    elif MODEL == 'CoLA':
-        labels.append(convert_label_cola(int(row['label'])))
-    elif MODEL == 'QNLI':
+    elif MODEL == 'CoLA' or MODEL == 'SST2' or MODEL == 'QNLI':
         labels.append(convert_label_cola(int(row['label'])))
 
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # TODO: Should I include sep tokens?
     elif MODEL == 'BERT':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
-    elif MODEL == 'CoLA':
+    elif MODEL == 'CoLA' or MODEL == 'SST2':
         inputs.append(row['sentence']) # Testing this
     elif MODEL == 'QNLI':
-        inputs.append(row['question'] + ' [SEP] ' + row['sentence'])
+        inputs.append(row['question'] + ' ' + row['sentence'])
 
     
 prediction_counts = {}
