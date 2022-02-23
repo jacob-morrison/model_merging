@@ -45,42 +45,49 @@ def convert_label_bert(label):
 MODEL = 'BERT'
 
 if MODEL == 'RoBERTa':
-    tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
-    model = AutoModelForSequenceClassification.from_pretrained("roberta-large-mnli")
+    model = 'roberta-large-mnli'
 elif MODEL == 'BERT':
-    tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-MNLI")
-    model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-MNLI")
+    model = 'textattack/bert-base-uncased-MNLI'
+elif MODEL == 'CoLA':
+    model = 'textattack/bert-base-uncased-CoLA'
 
+tokenizer = AutoTokenizer.from_pretrained(model)
+model = AutoModelForSequenceClassification.from_pretrained(model)
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli', split='validation_matched[:1000]')
+dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
 for i in range(len(dataset)):
-# for i in range(100):
     row = dataset[i]
     if MODEL == 'RoBERTa':
         labels.append(convert_label(int(row['label'])))
     elif MODEL == 'BERT':
+        labels.append(convert_label_bert(int(row['label'])))
+    elif MODEL == 'CoLA':
         labels.append(convert_label_bert(int(row['label'])))
 
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # TODO: Should I include sep tokens?
     elif MODEL == 'BERT':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # Doesn't work
+    elif MODEL == 'CoLA':
+        inputs.append(row['sentence']) # Testing this
+
     
 prediction_counts = {}
 results = classifier(inputs)
 correct_count = 0
 for i in range(len(results)):
     results[i]['prediction'] = labels[i]
+    if results[i]['label'] == results[i]['prediction']:
+        correct_count += 1
+
     if results[i]['label'] not in prediction_counts:
         prediction_counts[results[i]['label']] = {}
     if results[i]['prediction'] not in prediction_counts[results[i]['label']]:
         prediction_counts[results[i]['label']][results[i]['prediction']] = 0
     prediction_counts[results[i]['label']][results[i]['prediction']] += 1 
-    if results[i]['label'] == results[i]['prediction']:
-        correct_count += 1
 
 
 pprint(results)
