@@ -128,7 +128,6 @@ def _convert_dataset_to_features(
 def load_glue_dataset(task: str, split: str, tokenizer, max_length: int):
     tfds_task = _to_tfds_task_name(task, split)
     ds = tfds.load(f"glue/{tfds_task}", split=split)
-    print(ds)
     ds = _convert_dataset_to_features(
         ds,
         tokenizer,
