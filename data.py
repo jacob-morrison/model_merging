@@ -56,6 +56,10 @@ def _convert_dataset_to_features(
         example = processor.get_example_from_tensor_dict(example)
         example = processor.tfds_map(example)
 
+        print(example.text_a)
+        print(example.text_b)
+        print()
+        return
         inputs = tokenizer.encode_plus(
             example.text_a,
             example.text_b,
