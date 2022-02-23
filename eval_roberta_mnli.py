@@ -42,6 +42,16 @@ def convert_label_bert(label):
     else:
         return 'WTF'
 
+def convert_label_cola(label):
+    if label == 0:
+        return 'LABEL_0'
+        # return 'LABEL_2'
+    elif label == 1:
+        return 'LABEL_1'
+        # return 'LABEL_0'
+    else:
+        return 'WTF'
+
 MODEL = 'BERT'
 
 if MODEL == 'RoBERTa':
@@ -57,7 +67,10 @@ classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 inputs = []
 labels = []
-dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
+if MODEL == 'RoBERTa' or MODEL == 'BERT':
+    dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
+elif MODEL == 'CoLA':
+    dataset = load_dataset('glue', 'cola', split='validation[:100]')
 for i in range(len(dataset)):
     row = dataset[i]
     if MODEL == 'RoBERTa':
@@ -65,7 +78,7 @@ for i in range(len(dataset)):
     elif MODEL == 'BERT':
         labels.append(convert_label_bert(int(row['label'])))
     elif MODEL == 'CoLA':
-        labels.append(convert_label_bert(int(row['label'])))
+        labels.append(convert_label_cola(int(row['label'])))
 
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # TODO: Should I include sep tokens?
