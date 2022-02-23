@@ -112,6 +112,8 @@ def generate_merged_for_coeffs_set(
             normalization_constants=norm_constants,
         )
         yield coefficients, output_model
+        print(output_model)
+        break
 
 
 def merging_coefficients_search(
