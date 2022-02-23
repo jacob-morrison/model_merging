@@ -112,9 +112,9 @@ def generate_merged_for_coeffs_set(
             normalization_constants=norm_constants,
         )
         yield coefficients, output_model
-        print(mergeable_models[0].bert.encoder.layer[0])
-        print(output_model.encoder.layer[0])
-        break
+        # print(mergeable_models[0].bert.encoder.layer[0])
+        # print(output_model.encoder.layer[0])
+        # break
 
 
 def merging_coefficients_search(
@@ -138,7 +138,7 @@ def merging_coefficients_search(
     )
     results = []
     for coeffs, merged_model in merged_models:
-        score = evaluation.evaluate_model(merged_model, dataset, metric)
+        score = evaluation.evaluate_model(merged_model, dataset, metric, mergeable_models)
         result = MergeResult(coefficients=coeffs, score=score)
         results.append(result)
         if print_results:
