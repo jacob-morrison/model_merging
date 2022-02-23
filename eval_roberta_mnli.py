@@ -94,7 +94,7 @@ for i in range(len(dataset)):
     elif MODEL == 'CoLA':
         inputs.append(row['sentence']) # Testing this
     elif MODEL == 'QNLI':
-        inputs.append(row['question'] + ' ' + row['sentence'])
+        inputs.append(row['question'] + ' [SEP] ' + row['sentence'])
 
     
 prediction_counts = {}
