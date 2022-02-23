@@ -138,7 +138,7 @@ def merging_coefficients_search(
     )
     results = []
     for coeffs, merged_model in merged_models:
-        score = evaluation.evaluate_model(merged_model, dataset, metric, mergeable_models)
+        score = evaluation.evaluate_model(merged_model, dataset, metric, mergeable_models) # delete mergeable_models
         result = MergeResult(coefficients=coeffs, score=score)
         results.append(result)
         if print_results:
