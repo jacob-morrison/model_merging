@@ -74,7 +74,7 @@ if MODEL == 'RoBERTa' or MODEL == 'BERT':
 elif MODEL == 'CoLA':
     dataset = load_dataset('glue', 'cola', split='validation')
 elif MODEL == 'QNLI':
-    data = load_dataset('glue', 'qnli', split='validation[:100]')
+    dataset = load_dataset('glue', 'qnli', split='validation[:100]')
 
 for i in range(len(dataset)):
     row = dataset[i]
