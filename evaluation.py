@@ -13,11 +13,11 @@ def evaluate_model(model, dataset: tf.data.Dataset, metric: hfds.Metric):
     for model_input, gold_references in dataset:
         model_predictions = model(model_input).logits
         model_predictions = tf.argmax(model_predictions, axis=-1)
-        # print('model predictions:')
-        # print(model_predictions)
-        # print('gold references:')
-        # print(gold_references)
-        # print()
+        print('model predictions:')
+        print(model_predictions)
+        print('gold references:')
+        print(gold_references)
+        print()
         metric.add_batch(predictions=model_predictions, references=gold_references)
     return metric.compute()
 
