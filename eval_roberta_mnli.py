@@ -70,7 +70,7 @@ labels = []
 if MODEL == 'RoBERTa' or MODEL == 'BERT':
     dataset = load_dataset('glue', 'mnli', split='validation_matched[:10]')
 elif MODEL == 'CoLA':
-    dataset = load_dataset('glue', 'cola', split='validation[:100]')
+    dataset = load_dataset('glue', 'cola', split='validation')
 for i in range(len(dataset)):
     row = dataset[i]
     if MODEL == 'RoBERTa':
