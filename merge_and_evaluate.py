@@ -39,6 +39,7 @@ flags.DEFINE_bool("normalize_fishers", True, "")
 def load_models():
     models = []
     for i, model_str in enumerate(FLAGS.models):
+        print(model_str)
         model_str = os.path.expanduser(model_str)
         model = TFAutoModelForSequenceClassification.from_pretrained(
             model_str, from_pt=FLAGS.from_pt
