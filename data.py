@@ -97,7 +97,7 @@ def _convert_dataset_to_features(
         input_ids, token_type_ids, attention_mask, label = tf.py_function(
             func=py_map_fn,
             inp=[list(example.keys()), *example.values()],
-            Tout=[tf.int32, tf.int32, tf.int64],
+            Tout=[tf.int32, tf.int32, tf.int32, tf.int64],
         )
         return input_ids, token_type_ids, attention_mask, label
 
