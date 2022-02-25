@@ -67,10 +67,13 @@ def _convert_dataset_to_features(
             return_token_type_ids=True,
             truncation=True,
         )
-        input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
+        input_ids = inputs["input_ids"]
+        token_type_ids = inputs["token_type_ids"]
+        attention_mask = inputs["attention_mask"]
 
         input_ids = tf.constant(input_ids, dtype=tf.int32)
         token_type_ids = tf.constant(token_type_ids, dtype=tf.int32)
+        attention_mask = tf.constant(attention_mask, dtype=tf.int32)
 
         if output_mode == "classification":
             label = label_map[example.label]
@@ -88,17 +91,17 @@ def _convert_dataset_to_features(
         # print(label)
         # print()
         # print(None.length)
-        return input_ids, token_type_ids, label
+        return input_ids, token_type_ids, attention_mask, label
 
     def map_fn(example):
-        input_ids, token_type_ids, label = tf.py_function(
+        input_ids, token_type_ids, attention_mask, label = tf.py_function(
             func=py_map_fn,
             inp=[list(example.keys()), *example.values()],
             Tout=[tf.int32, tf.int32, tf.int64],
         )
-        return input_ids, token_type_ids, label
+        return input_ids, token_type_ids, attention_mask, label
 
-    def pad_fn(input_ids, token_type_ids, label):
+    def pad_fn(input_ids, token_type_ids, attention_mask, label):
         # Zero-pad up to the sequence length.
         padding_length = max_length - tf.shape(input_ids)[-1]
 
@@ -112,11 +115,19 @@ def _convert_dataset_to_features(
             ],
             axis=-1,
         )
+        attention_mask = tf.concat(
+            [
+                attention_mask,
+                0 * tf.zeros(padding_length, dtype=tf.int32)
+            ],
+            axis=-1,
+        )
 
         tf_example = {
             # Ensure the shape is known as this is often needed for downstream steps.
             "input_ids": tf.reshape(input_ids, [max_length]),
             "token_type_ids": tf.reshape(token_type_ids, [max_length]),
+            "attention_mask": tf.reshape(attention_mask, [max_length]),
         }
         return tf_example, label
 
