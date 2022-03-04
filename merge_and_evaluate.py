@@ -12,7 +12,7 @@ import evaluation
 import hdf5_util
 import merging
 
-def set_flags():
+def set_all_flags():
     FLAGS = flags.FLAGS
 
     # TODO: Add descriptions to flags
@@ -36,7 +36,6 @@ def set_flags():
     flags.DEFINE_float("fisher_floor", 1e-6, "")
     flags.DEFINE_bool("favor_target_model", True, "")
     flags.DEFINE_bool("normalize_fishers", True, "")
-
 
 def load_models(models_list):
     models = []
@@ -79,12 +78,12 @@ def get_best_results(results):
 
 
 def main(_):
-    set_flags()
+    set_all_flags()
     run_merge(FLAGS.models, FLAGS.fishers, FLAGS.glue_task, False)
 
 def run_merge(models_list, fishers_list, task, set_flags = True):
     if set_flags:
-        set_flags()
+        set_all_flags()
 
     if fishers_list:
         assert len(fishers_list) == len(models_list)
