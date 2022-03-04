@@ -1,5 +1,6 @@
 """Script for computing the diagonal Fisher of a model."""
 import os
+os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 
 from absl import app
 from absl import flags
