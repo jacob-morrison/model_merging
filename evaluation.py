@@ -6,6 +6,8 @@ import tensorflow as tf
 def load_metric_for_glue_task(task: str):
     if task == 'sst-2':
         task = 'sst2'
+    if task == 'sts-b':
+        task = 'stsb'
     return hfds.load_metric("glue", task)
 
 
