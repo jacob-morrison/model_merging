@@ -52,7 +52,7 @@ def convert_label_cola(label):
     else:
         return 'WTF'
 
-MODEL = 'SST2-roberta'
+MODEL = 'STS-B'
 
 if MODEL == 'RoBERTa':
     model = 'roberta-large-mnli'
