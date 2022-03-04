@@ -1,5 +1,6 @@
 """Script for actually merging models."""
 import os
+os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 
 from absl import app
 from absl import flags
