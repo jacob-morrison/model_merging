@@ -42,11 +42,15 @@ def _convert_dataset_to_features(
 
     processor = _glue_processors[task]()
     output_mode = _glue_output_modes[task]
+    print('output mode:')
+    print(output_mode)
 
     if task == "sts-b":
         # STS-B regression.
         stsb_bins = np.linspace(_STSB_MIN, _STSB_MAX, num=_STSB_NUM_BINS + 1)
         stsb_bins = stsb_bins[1:-1]
+        print('stsb bins:')
+        print(stsb_bins)
     else:
         label_list = processor.get_labels()
         label_map = {label: i for i, label in enumerate(label_list)}
