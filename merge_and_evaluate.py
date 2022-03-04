@@ -77,6 +77,9 @@ def get_best_results(results):
 
 
 def main(_):
+    run_merge()
+
+def run_merge():
     if FLAGS.fishers:
         assert len(FLAGS.fishers) == len(FLAGS.models)
 
