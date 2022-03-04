@@ -42,15 +42,16 @@ def _convert_dataset_to_features(
 
     processor = _glue_processors[task]()
     output_mode = _glue_output_modes[task]
-    print('output mode:')
-    print(output_mode)
+    # print('output mode:')
+    # print(output_mode)
 
     if task == "sts-b":
         # STS-B regression.
         stsb_bins = np.linspace(_STSB_MIN, _STSB_MAX, num=_STSB_NUM_BINS + 1)
+        # print('stsb bins:')
+        # print(stsb_bins)
         stsb_bins = stsb_bins[1:-1]
-        print('stsb bins:')
-        print(stsb_bins)
+        # print(stsb_bins)
     else:
         label_list = processor.get_labels()
         label_map = {label: i for i, label in enumerate(label_list)}
@@ -83,22 +84,22 @@ def _convert_dataset_to_features(
             label = label_map[example.label]
             label = tf.constant(label, dtype=tf.int64)
         else:
-            print('label:')
+            # print('label:')
             label = float(example.label)
-            print(label)
+            # print(label)
             assert 0.0 <= label <= 5.0, f"Out of range STS-B label {label}."
             label = np.digitize(label, stsb_bins)
-            print(label)
+            # print(label)
             label = tf.constant(label, dtype=tf.int64)
-            print(label)
-        print(example.text_a)
-        print(example.text_b)
-        print(output_mode)
-        print(input_ids)
-        print(token_type_ids)
-        print(label)
-        print()
-        print(None.length)
+            # print(label)
+        # print(example.text_a)
+        # print(example.text_b)
+        # print(output_mode)
+        # print(input_ids)
+        # print(token_type_ids)
+        # print(label)
+        # print()
+        # print(None.length)
         return input_ids, token_type_ids, attention_mask, label
 
     def map_fn(example):
