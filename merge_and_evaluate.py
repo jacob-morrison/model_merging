@@ -37,9 +37,10 @@ flags.DEFINE_bool("favor_target_model", True, "")
 flags.DEFINE_bool("normalize_fishers", True, "")
 
 
-def load_models():
+def load_models(models_list):
     models = []
-    for i, model_str in enumerate(FLAGS.models):
+    # for i, model_str in enumerate(FLAGS.models):
+    for i, model_str in enumerate(models_list):
         model_str = os.path.expanduser(model_str)
         model = TFAutoModelForSequenceClassification.from_pretrained(
             model_str, from_pt=FLAGS.from_pt
@@ -50,11 +51,11 @@ def load_models():
     return models, tokenizer
 
 
-def load_fishers():
-    if not FLAGS.fishers:
+def load_fishers(fishers_list):
+    if not fishers_list:
         return None
     fishers = []
-    for fisher_str in FLAGS.fishers:
+    for fisher_str in fishers_list:
         fisher_str = os.path.expanduser(fisher_str)
         fisher = hdf5_util.load_variables_from_hdf5(fisher_str, trainable=False)
         fishers.append(fisher)
@@ -77,25 +78,25 @@ def get_best_results(results):
 
 
 def main(_):
-    run_merge()
+    run_merge(FLAGS.models, FLAGS.fishers, FLAGS.glue_task)
 
-def run_merge():
-    if FLAGS.fishers:
-        assert len(FLAGS.fishers) == len(FLAGS.models)
+def run_merge(models_list, fishers_list, task):
+    if fishers_list:
+        assert len(fishers_list) == len(models_list)
 
-    models, tokenizer = load_models()
+    models, tokenizer = load_models(models_list)
 
-    fishers = load_fishers()
+    fishers = load_fishers(fishers_list)
 
     ds = data.load_glue_dataset(
-        task=FLAGS.glue_task,
+        task=task,
         split=FLAGS.split,
         tokenizer=tokenizer,
         max_length=FLAGS.sequence_length,
     )
     ds = ds.take(FLAGS.n_examples).batch(FLAGS.batch_size)
 
-    metric = evaluation.load_metric_for_glue_task(FLAGS.glue_task)
+    metric = evaluation.load_metric_for_glue_task(task)
 
     coefficients_set = get_coeffs_set()
 
@@ -115,6 +116,7 @@ def run_merge():
     print(" Best Merge")
     print(80 * "*")
     merging.print_merge_result(best)
+    return best
 
 
 if __name__ == "__main__":
