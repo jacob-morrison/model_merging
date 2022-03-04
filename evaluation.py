@@ -13,12 +13,12 @@ def load_metric_for_glue_task(task: str):
 
 def evaluate_model(model, dataset: tf.data.Dataset, metric: hfds.Metric, mergeable_models):
     for model_input, gold_references in dataset:
-        input_model_predictions = mergeable_models[0](model_input).logits
-        input_model_predictions = tf.argmax(input_model_predictions, axis=-1)
         model_predictions = model(model_input).logits
         model_predictions = tf.argmax(model_predictions, axis=-1)
         print('model inputs:')
         print(model_input)
+        input_model_predictions = mergeable_models[0](model_input).logits
+        input_model_predictions = tf.argmax(input_model_predictions, axis=-1)
         print('input model predictions:')
         print(input_model_predictions)
         print('model predictions:')
