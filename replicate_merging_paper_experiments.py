@@ -44,9 +44,19 @@ tasks = [
     'rte'
 ]
 
-result = merge_and_evaluate.run_merge([models[0], models[0]], None, tasks[0])
+for target_idx in range(len(models)):
+    target_model = models[target_idx]
+    task = tasks[target_idx]
+    for intermediate_idx in range(len(models)):
+        intermediate_model = models[intermediate_idx]
+        result = merge_and_evaluate.run_merge([target_model, intermediate_model], None, task)
+
+        print(80 * '*')
+        print(' Target model: ' + target_model)
+        print(' Intermediate model: ' + intermediate_model)
+        merging.print_merge_result(result)
+        print(80 * '*')
+        print()
+
 print('merging meta script finished:')
-print(80 * "*")
-print(" Best Merge")
-print(80 * "*")
-merging.print_merge_result(best)
+
