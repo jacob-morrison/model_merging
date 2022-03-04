@@ -66,6 +66,8 @@ elif MODEL == 'SST2':
     model = 'textattack/bert-base-uncased-SST-2'
 elif MODEL == 'SST2-roberta':
     model = 'textattack/roberta-base-SST-2'
+elif MODEL == 'STS-B':
+    model = 'textattack/bert-base-uncased-STS-B'
 
 tokenizer = AutoTokenizer.from_pretrained(model)
 model = AutoModelForSequenceClassification.from_pretrained(model)
@@ -81,6 +83,8 @@ elif MODEL == 'QNLI':
     dataset = load_dataset('glue', 'qnli', split='validation')
 elif MODEL == 'SST2' or MODEL == 'SST2-roberta':
     dataset = load_dataset('glue', 'sst2', split='validation')
+elif MODEL == 'STS-B':
+    dataset = load_dataset('glue', 'stsb', split='validation[:10]')
 
 for i in range(len(dataset)):
     row = dataset[i]
@@ -90,6 +94,8 @@ for i in range(len(dataset)):
         labels.append(convert_label_bert(int(row['label'])))
     elif MODEL == 'CoLA' or MODEL == 'SST2' or MODEL == 'QNLI' or MODEL == 'SST2-roberta':
         labels.append(convert_label_cola(int(row['label'])))
+    elif MODEL == 'STS-B':
+        labels.append(int(row['label'])) # TODO: DEFINITELY wrong, just for debugging
 
     if MODEL == 'RoBERTa':
         inputs.append(row['premise'] + ' ' + row['hypothesis']) # TODO: Should I include sep tokens?
@@ -99,12 +105,17 @@ for i in range(len(dataset)):
         inputs.append(row['sentence']) # Testing this
     elif MODEL == 'QNLI':
         inputs.append(row['question'] + ' ' + row['sentence'])
+    elif MODEL == 'STS-B':
+        inputs.append(row['sentence1'] + ' ' + row['sentence2'])
 
     
 prediction_counts = {}
 results = classifier(inputs)
 correct_count = 0
 for i in range(len(results)):
+    print(labels[i])
+    print(results[i])
+    print()
     results[i]['prediction'] = labels[i]
     if results[i]['label'] == results[i]['prediction']:
         correct_count += 1
