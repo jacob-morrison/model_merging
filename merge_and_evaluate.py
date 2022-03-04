@@ -12,29 +12,30 @@ import evaluation
 import hdf5_util
 import merging
 
-FLAGS = flags.FLAGS
+def set_flags():
+    FLAGS = flags.FLAGS
 
-# TODO: Add descriptions to flags
+    # TODO: Add descriptions to flags
 
-# The target model will be first.
-flags.DEFINE_list("models", None, "")
-flags.DEFINE_string("glue_task", None, "")
+    # The target model will be first.
+    flags.DEFINE_list("models", None, "")
+    flags.DEFINE_string("glue_task", None, "")
 
-flags.DEFINE_list("fishers", None, "")
+    flags.DEFINE_list("fishers", None, "")
 
-flags.DEFINE_bool("from_pt", True, "")
+    flags.DEFINE_bool("from_pt", True, "")
 
-flags.DEFINE_string("split", "validation", "")
-flags.DEFINE_integer("n_examples", 4096, "")
-flags.DEFINE_integer("batch_size", 32, "")
-flags.DEFINE_integer("sequence_length", 128, "")
+    flags.DEFINE_string("split", "validation", "")
+    flags.DEFINE_integer("n_examples", 4096, "")
+    flags.DEFINE_integer("batch_size", 32, "")
+    flags.DEFINE_integer("sequence_length", 128, "")
 
-flags.DEFINE_integer("n_coeffs", 51, "")
-flags.DEFINE_enum("coeff_mode", "grid", ["grid", "random"], "")
+    flags.DEFINE_integer("n_coeffs", 51, "")
+    flags.DEFINE_enum("coeff_mode", "grid", ["grid", "random"], "")
 
-flags.DEFINE_float("fisher_floor", 1e-6, "")
-flags.DEFINE_bool("favor_target_model", True, "")
-flags.DEFINE_bool("normalize_fishers", True, "")
+    flags.DEFINE_float("fisher_floor", 1e-6, "")
+    flags.DEFINE_bool("favor_target_model", True, "")
+    flags.DEFINE_bool("normalize_fishers", True, "")
 
 
 def load_models(models_list):
@@ -78,9 +79,13 @@ def get_best_results(results):
 
 
 def main(_):
-    run_merge(FLAGS.models, FLAGS.fishers, FLAGS.glue_task)
+    set_flags()
+    run_merge(FLAGS.models, FLAGS.fishers, FLAGS.glue_task, False)
 
-def run_merge(models_list, fishers_list, task):
+def run_merge(models_list, fishers_list, task, set_flags = True):
+    if set_flags:
+        set_flags()
+
     if fishers_list:
         assert len(fishers_list) == len(models_list)
 
