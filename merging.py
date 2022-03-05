@@ -90,18 +90,29 @@ def generate_merged_for_coeffs_set(
     else:
         norm_constants = None
 
-    # The first model in the list of mergeable models is the "target" model and
-    # the rest are "donor" models.
-    output_model = hf_util.clone_model(mergeable_models[0])
-    output_variables = hf_util.get_mergeable_variables(output_model)
+    # # The first model in the list of mergeable models is the "target" model and
+    # # the rest are "donor" models.
+    # output_model = hf_util.clone_model(mergeable_models[0])
+    # output_variables = hf_util.get_mergeable_variables(output_model)
 
-    variables_to_merge = [hf_util.get_mergeable_variables(m) for m in mergeable_models]
+    # variables_to_merge = [hf_util.get_mergeable_variables(m) for m in mergeable_models]
 
-    # Make sure that all of the variable lists contain exactly the same number
-    # of variables.
-    assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
+    # # Make sure that all of the variable lists contain exactly the same number
+    # # of variables.
+    # assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
 
     for coefficients in coefficients_set:
+        # The first model in the list of mergeable models is the "target" model and
+        # the rest are "donor" models.
+        output_model = hf_util.clone_model(mergeable_models[0])
+        output_variables = hf_util.get_mergeable_variables(output_model)
+
+        variables_to_merge = [hf_util.get_mergeable_variables(m) for m in mergeable_models]
+
+        # Make sure that all of the variable lists contain exactly the same number
+        # of variables.
+        assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
+
         _merge_with_coeffs(
             output_variables,
             variables_to_merge,
