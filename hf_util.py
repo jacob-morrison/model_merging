@@ -34,7 +34,7 @@ def get_body_and_head(
 ) -> tf.keras.layers.Layer: # -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
     body, *head = model.layers
     print(body)
-    return body
+    return model.layers[0]
 
 
 def get_body(model):
