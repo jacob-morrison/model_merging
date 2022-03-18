@@ -31,8 +31,9 @@ from transformers import TFRobertaPreTrainedModel
 # TODO: try this one because I don't think they ever use the head
 def get_body_and_head(
     model: Union[TFBertPreTrainedModel, TFRobertaPreTrainedModel]
-) -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
+) -> tf.keras.layers.Layer: # -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
     body, *head = model.layers
+    print(body)
     return body
 
 
