@@ -113,6 +113,9 @@ def generate_merged_for_coeffs_set(
         # of variables.
         for v in variables_to_merge:
             print(len(v))
+        for m in mergeable_models:
+            print(m.summary())
+            print(m.layers)
         print(len(output_variables))
         print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
         assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
