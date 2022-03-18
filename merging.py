@@ -111,6 +111,7 @@ def generate_merged_for_coeffs_set(
 
         # Make sure that all of the variable lists contain exactly the same number
         # of variables.
+        print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
         assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
 
         _merge_with_coeffs(
