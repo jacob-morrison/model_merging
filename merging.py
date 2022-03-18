@@ -48,6 +48,8 @@ def _merge_with_coeffs(
     if fishers is None:
         fishers = n_models * [1.0]
     else:
+        print('num fishers:')
+        print(len(fishers))
         assert len(fishers) == n_models
 
     if normalization_constants is not None:
@@ -60,6 +62,7 @@ def _merge_with_coeffs(
             zip(variables_to_merge, coefficients, fishers)
         ):
             diag = fisher if isinstance(fisher, float) else fisher[i]
+            print(diag)
             if not favor_target_model or j == 0:
                 diag = tf.maximum(diag, fisher_floor)
             mvar = mvars[i]
