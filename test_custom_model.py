@@ -41,7 +41,7 @@ for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, rob
     if bert_shape != roberta_shape:
         print('Mismatch!!')
         print(bert_shape)
-        print(bert_param)
         print(roberta_shape)
+        print(bert_param)
         print(roberta_param)
         print()
