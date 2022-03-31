@@ -37,10 +37,11 @@ for name, param in vit_model.named_parameters():
         roberta_total_params += start
         roberta_params.append(name)
 
-for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params[5:], roberta_params[4:], bert_shapes[5:], roberta_shapes[4:]):
+for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
     if bert_shape != roberta_shape:
         print('Mismatch!!')
         print(bert_shape)
         print(bert_param)
         print(roberta_shape)
         print(roberta_param)
+        print()
