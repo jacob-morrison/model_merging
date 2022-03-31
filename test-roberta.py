@@ -52,13 +52,39 @@ roberta_xlm_model = RobertaModel.from_pretrained('xlm-roberta-large')
 # print(vit_layer)
 # summary(vit_layer, input_size=(1,768))
 
-# vit_params = set()
-# print("ViT params:")
-# for name, param in vit_model.named_parameters():
-#     if param.requires_grad:
-#         print(str(name))
-#         print(param.data.size())
-#         vit_params.add(name)
+bert_params = []
+bert_shapes = []
+bert_total_params = 0
+for name, param in bert.named_parameters():
+    if param.requires_grad:
+        print(str(name))
+        start = 1
+        bert_shapes.append(param.data.size())
+        for elem in list(param.data.size()):
+            start *= elem
+        bert_total_params += start
+        bert_params.append(name)
+
+roberta_params = []
+roberta_shapes = []
+roberta_total_params = 0
+for name, param in roberta.named_parameters():
+    if param.requires_grad:
+        print(str(name))
+        start = 1
+        roberta_shapes.append(param.data.size())
+        for elem in list(param.data.size()):
+            start *= elem
+        roberta_total_params += start
+        roberta_params.append(name)
+
+for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
+    if bert_shape != roberta_shape:
+        print('Mismatch!!')
+        print(bert_shape)
+        print(bert_param)
+        print(roberta_shape)
+        print(roberta_param)
 
 
 

@@ -109,15 +109,21 @@ def generate_merged_for_coeffs_set(
 
         variables_to_merge = [hf_util.get_mergeable_variables(m) for m in mergeable_models]
 
+        # TODO: filter variables to merge
+        for i in range(len(variables_to_merge)):
+            pass
+            
+
         # Make sure that all of the variable lists contain exactly the same number
         # of variables.
-        for v in variables_to_merge:
-            print(len(v))
-        for m in mergeable_models:
-            print(m.summary())
-            print(m.layers)
-        print(len(output_variables))
-        print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
+
+        # for v in variables_to_merge:
+        #     print(len(v))
+        # for m in mergeable_models:
+        #     print(m.summary())
+        #     print(m.layers)
+        # print(len(output_variables))
+        # print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
         assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
 
         _merge_with_coeffs(
