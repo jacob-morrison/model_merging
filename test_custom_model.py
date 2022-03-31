@@ -1,6 +1,6 @@
 from transformers import RobertaTokenizer, RobertaModel, ViTFeatureExtractor, ViTModel
 
-test_model = RobertaModel.from_pretrained('/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt')
+test_model = RobertaModel.from_pretrained('/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt', from_pt=True)
 
 bert_params = []
 bert_shapes = []
