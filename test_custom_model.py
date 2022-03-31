@@ -1,3 +1,6 @@
+import os
+os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
+
 from transformers import RobertaConfig, RobertaModel, ViTFeatureExtractor, ViTModel
 
 configuration = RobertaConfig()
