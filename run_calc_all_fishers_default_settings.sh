@@ -21,7 +21,7 @@ else
 fi
 unset __conda_setup
 
-    conda activate merge-models
+conda activate merge-models
 module load cuda/11.2
 module load cudnn/8.1
 nvidia-smi
