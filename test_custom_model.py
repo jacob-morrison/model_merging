@@ -9,6 +9,7 @@ roberta_model = RobertaModel.from_pretrained(
     config=configuration)
 vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
 
+print('roberta:')
 bert_params = []
 bert_shapes = []
 bert_total_params = 0
@@ -22,6 +23,7 @@ for name, param in roberta_model.named_parameters():
         bert_total_params += start
         bert_params.append(name)
 
+print('vit:')
 roberta_params = []
 roberta_shapes = []
 roberta_total_params = 0
@@ -35,10 +37,10 @@ for name, param in vit_model.named_parameters():
         roberta_total_params += start
         roberta_params.append(name)
 
-for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
-    if bert_shape != roberta_shape:
-        print('Mismatch!!')
-        print(bert_shape)
-        print(bert_param)
-        print(roberta_shape)
-        print(roberta_param)
+# for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
+#     if bert_shape != roberta_shape:
+#         print('Mismatch!!')
+#         print(bert_shape)
+#         print(bert_param)
+#         print(roberta_shape)
+#         print(roberta_param)
