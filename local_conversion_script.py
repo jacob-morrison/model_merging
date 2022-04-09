@@ -59,10 +59,10 @@ def convert_roberta_checkpoint_to_pytorch(
     roberta_sent_encoder = roberta.model.encoder.sentence_encoder
     config = RobertaConfig(
         vocab_size=roberta_sent_encoder.embed_tokens.num_embeddings,
-        hidden_size=roberta.args.encoder_embed_dim,
-        num_hidden_layers=roberta.args.encoder_layers,
-        num_attention_heads=roberta.args.encoder_attention_heads,
-        intermediate_size=roberta.args.encoder_ffn_embed_dim,
+        hidden_size=roberta.model.args.encoder_embed_dim,
+        num_hidden_layers=roberta.model.args.encoder_layers,
+        num_attention_heads=roberta.model.args.encoder_attention_heads,
+        intermediate_size=roberta.model.args.encoder_ffn_embed_dim,
         max_position_embeddings=514,
         type_vocab_size=1,
         layer_norm_eps=1e-5,  # PyTorch default used in fairseq
