@@ -51,6 +51,9 @@ def convert_roberta_checkpoint_to_pytorch(
     """
     Copy/paste/tweak roberta's weights to our BERT structure.
     """
+    print(roberta_checkpoint_path)
+    print(pytorch_dump_folder_path)
+    print(classification_head)
     roberta = FairseqRobertaModel.from_pretrained(roberta_checkpoint_path)
     roberta.eval()  # disable dropout
     roberta_sent_encoder = roberta.model.encoder.sentence_encoder
