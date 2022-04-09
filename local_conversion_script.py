@@ -170,7 +170,7 @@ if __name__ == "__main__":
         "--pytorch_dump_folder_path", default=None, type=str, required=True, help="Path to the output PyTorch model."
     )
     parser.add_argument(
-        "--classification_head", action="store_true", help="Whether to convert a final classification head."
+        "--classification_head", default=False, action="store_true", help="Whether to convert a final classification head."
     )
     args = parser.parse_args()
     convert_roberta_checkpoint_to_pytorch(
