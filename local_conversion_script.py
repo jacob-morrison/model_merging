@@ -19,6 +19,7 @@ import argparse
 import pathlib
 
 import fairseq
+print(fairseq.__version__)
 import torch
 from fairseq.models.roberta import RobertaModel as FairseqRobertaModel
 from fairseq.modules import TransformerSentenceEncoderLayer
