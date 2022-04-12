@@ -87,8 +87,8 @@ def convert_roberta_checkpoint_to_pytorch(
     # model.roberta.embeddings.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
     
     # TODO: I modified this
-    model.roberta.LayerNorm.weight = roberta_sent_encoder.layernorm_embedding.weight
-    model.roberta.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
+    model.roberta.layernorm.weight = roberta_sent_encoder.layernorm_embedding.weight
+    model.roberta.layernorm.bias = roberta_sent_encoder.layernorm_embedding.bias
 
     for i in range(config.num_hidden_layers):
         # Encoder: start of layer
