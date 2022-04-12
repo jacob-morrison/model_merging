@@ -34,6 +34,7 @@ from transformers.models.bert.modeling_bert import (
 )
 from transformers.utils import logging
 
+from roberta_model_pre_norm_from_roberta import RobertaWithNormBeforeForMaskedLM, RobertaWithNormBeforeForSequenceClassification
 
 if version.parse(fairseq.__version__) < version.parse("0.9.0"):
     raise Exception("requires fairseq >= 0.9.0")
@@ -71,7 +72,8 @@ def convert_roberta_checkpoint_to_pytorch(
         config.num_labels = roberta.model.classification_heads["mnli"].out_proj.weight.shape[0]
     print("Our BERT config:", config)
 
-    model = RobertaForSequenceClassification(config) if classification_head else RobertaForMaskedLM(config)
+    # model = RobertaForSequenceClassification(config) if classification_head else RobertaForMaskedLM(config)
+    model = RobertaWithNormBeforeForSequenceClassification(config) if classification_head else RobertaWithNormBeforeForMaskedLM(config)
     model.eval()
 
     # Now let's copy all the weights.
@@ -81,8 +83,12 @@ def convert_roberta_checkpoint_to_pytorch(
     model.roberta.embeddings.token_type_embeddings.weight.data = torch.zeros_like(
         model.roberta.embeddings.token_type_embeddings.weight
     )  # just zero them out b/c RoBERTa doesn't use them.
-    model.roberta.embeddings.LayerNorm.weight = roberta_sent_encoder.layernorm_embedding.weight
-    model.roberta.embeddings.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
+    # model.roberta.embeddings.LayerNorm.weight = roberta_sent_encoder.layernorm_embedding.weight
+    # model.roberta.embeddings.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
+    
+    # TODO: I modified this
+    model.roberta.LayerNorm.weight = roberta_sent_encoder.layernorm_embedding.weight
+    model.roberta.LayerNorm.bias = roberta_sent_encoder.layernorm_embedding.bias
 
     for i in range(config.num_hidden_layers):
         # Encoder: start of layer
