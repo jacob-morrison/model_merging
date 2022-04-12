@@ -116,8 +116,10 @@ def convert_roberta_checkpoint_to_pytorch(
         assert self_output.dense.weight.shape == roberta_layer.self_attn.out_proj.weight.shape
         self_output.dense.weight = roberta_layer.self_attn.out_proj.weight
         self_output.dense.bias = roberta_layer.self_attn.out_proj.bias
-        self_output.layernorm.weight = roberta_layer.self_attn_layer_norm.weight
-        self_output.layernorm.bias = roberta_layer.self_attn_layer_norm.bias
+        # self_output.layernorm.weight = roberta_layer.self_attn_layer_norm.weight
+        # self_output.layernorm.bias = roberta_layer.self_attn_layer_norm.bias
+        layer.layernorm_before.weight = roberta_layer.self_attn_layer_norm.weight
+        layer.layernorm_before.bias = roberta_layer.self_attn_layer_norm.bias
 
         # intermediate
         intermediate: BertIntermediate = layer.intermediate
@@ -130,8 +132,10 @@ def convert_roberta_checkpoint_to_pytorch(
         assert bert_output.dense.weight.shape == roberta_layer.fc2.weight.shape
         bert_output.dense.weight = roberta_layer.fc2.weight
         bert_output.dense.bias = roberta_layer.fc2.bias
-        bert_output.layernorm.weight = roberta_layer.final_layer_norm.weight
-        bert_output.layernorm.bias = roberta_layer.final_layer_norm.bias
+        # bert_output.layernorm.weight = roberta_layer.final_layer_norm.weight
+        # bert_output.layernorm.bias = roberta_layer.final_layer_norm.bias
+        layer.layernorm_after.weight = roberta_layer.final_layer_norm.weight
+        layer.layernorm_after.bias = roberta_layer.final_layer_norm.bias
         # end of layer
 
     if classification_head:
