@@ -39,11 +39,12 @@ for name, param in vit_model.named_parameters():
         roberta_params.append(name)
 
 for i in range(5, len(bert_params)):
-    print(bert_params[i])
-    print(bert_shapes[i])
-    print(roberta_params[i-1])
-    print(roberta_shapes[i-1])
-    print()
+    if bert_params[i] == roberta_params[i-1]:
+        print(bert_params[i])
+        print(bert_shapes[i])
+        print(roberta_params[i-1])
+        print(roberta_shapes[i-1])
+        print()
 
 # for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
 #     if bert_shape != roberta_shape:
