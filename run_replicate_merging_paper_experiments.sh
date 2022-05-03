@@ -21,6 +21,7 @@ else
 fi
 unset __conda_setup
 
+# qrsh -g $ID_GROUP -l rt_F=1 -l h_rt=1:00:00 -v GPU_COMPUTE_MODE=1
 conda activate merge-models
 module load cuda/11.2
 module load cudnn/8.1

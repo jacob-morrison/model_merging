@@ -2,6 +2,7 @@ import os
 os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 
 from transformers import RobertaConfig, RobertaModel, ViTFeatureExtractor, ViTModel
+from pprint import pprint
 
 configuration = RobertaConfig()
 roberta_model = RobertaModel.from_pretrained(
@@ -23,6 +24,8 @@ for name, param in roberta_model.named_parameters():
         bert_total_params += start
         bert_params.append(name)
 
+pprint(zip(bert_params, bert_shapes))
+
 print('vit:')
 roberta_params = []
 roberta_shapes = []
@@ -37,11 +40,13 @@ for name, param in vit_model.named_parameters():
         roberta_total_params += start
         roberta_params.append(name)
 
-for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
-    if bert_shape != roberta_shape:
-        print('Mismatch!!')
-        print(bert_shape)
-        print(roberta_shape)
-        print(bert_param)
-        print(roberta_param)
-        print()
+pprint(zip(roberta_params, roberta_shapes))
+
+# for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
+#     if bert_shape != roberta_shape:
+#         print('Mismatch!!')
+#         print(bert_shape)
+#         print(roberta_shape)
+#         print(bert_param)
+#         print(roberta_param)
+#         print()
