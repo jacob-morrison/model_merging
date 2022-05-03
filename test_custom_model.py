@@ -10,13 +10,13 @@ roberta_model = RobertaModel.from_pretrained(
     config=configuration)
 vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
 
-print('roberta:')
+# print('roberta:')
 bert_params = []
 bert_shapes = []
 bert_total_params = 0
 for name, param in roberta_model.named_parameters():
     if param.requires_grad:
-        print(str(name))
+        # print(str(name))
         start = 1
         bert_shapes.append(param.data.size())
         for elem in list(param.data.size()):
@@ -24,15 +24,13 @@ for name, param in roberta_model.named_parameters():
         bert_total_params += start
         bert_params.append(name)
 
-pprint(zip(bert_params, bert_shapes))
-
-print('vit:')
+# print('vit:')
 roberta_params = []
 roberta_shapes = []
 roberta_total_params = 0
 for name, param in vit_model.named_parameters():
     if param.requires_grad:
-        print(str(name))
+        # print(str(name))
         start = 1
         roberta_shapes.append(param.data.size())
         for elem in list(param.data.size()):
@@ -40,7 +38,12 @@ for name, param in vit_model.named_parameters():
         roberta_total_params += start
         roberta_params.append(name)
 
-pprint(zip(roberta_params, roberta_shapes))
+for i in range(5, len(bert_params)):
+    print(bert_params[i])
+    print(bert_shapes[i])
+    print(roberta_params[i-1])
+    print(roberta_shapes[i-1])
+    print()
 
 # for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
 #     if bert_shape != roberta_shape:
