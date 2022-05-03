@@ -5,7 +5,7 @@ os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 from absl import app
 from absl import flags
 from absl import logging
-from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, ViTModel
+from transformers import TFAutoModelForSequenceClassification, AutoTokenizer, TFViTModel
 
 import data
 import evaluation
@@ -42,7 +42,7 @@ def load_models(models_list, from_pt):
     for i, model_str in enumerate(models_list):
         model_str = os.path.expanduser(model_str)
         if 'google/vit-base-patch16-224-in21k' in model_str:
-            model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
+            model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from_pt=from_pt)
         else:
             model = TFAutoModelForSequenceClassification.from_pretrained(
                 model_str, from_pt=from_pt
