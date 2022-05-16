@@ -1,11 +1,11 @@
 import os
 os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 
-from transformers import vitConfig, vitModel, ViTFeatureExtractor, ViTModel
+from transformers import RobertaConfig, RobertaModel, ViTFeatureExtractor, ViTModel
 from pprint import pprint
 
-configuration = vitConfig()
-roberta_model = vitModel.from_pretrained(
+configuration = RobertaConfig()
+roberta_model = RobertaModel.from_pretrained(
     '/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt',
     config=configuration)
 vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
