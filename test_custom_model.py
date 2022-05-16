@@ -13,9 +13,12 @@ roberta_layers = roberta_model.layers[0]
 vit_model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from_pt=True)
 vit_layers = vit_model.layers[0]
 
+object_methods = [method_name for method_name in dir(roberta_model)
+                  if callable(getattr(roberta_model, method_name))]
+
 print('roberta layers:')
 print(roberta_layers)
-print(roberta_model.named_parameters())
+print(object_methods)
 print('vit layers:')
 print(vit_layers)
 
