@@ -15,7 +15,9 @@ vit_layers = vit_model.layers[0]
 
 print('roberta layers:')
 print(roberta_layers)
-pprint(dir(roberta_model))
+# pprint(dir(roberta_model))
+pprint(dir(roberta_layers))
+print(roberta_model.summary())
 print('vit layers:')
 print(vit_layers)
 
