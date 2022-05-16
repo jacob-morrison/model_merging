@@ -1,34 +1,20 @@
 import os
 os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 
-from transformers import RobertaConfig, RobertaModel, ViTFeatureExtractor, ViTModel
+from transformers import vitConfig, vitModel, ViTFeatureExtractor, ViTModel
 from pprint import pprint
 
-configuration = RobertaConfig()
-roberta_model = RobertaModel.from_pretrained(
+configuration = vitConfig()
+roberta_model = vitModel.from_pretrained(
     '/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt',
     config=configuration)
 vit_model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
 
 # print('roberta:')
-bert_params = []
-bert_shapes = []
-bert_total_params = 0
-for name, param in roberta_model.named_parameters():
-    if param.requires_grad:
-        # print(str(name))
-        start = 1
-        bert_shapes.append(param.data.size())
-        for elem in list(param.data.size()):
-            start *= elem
-        bert_total_params += start
-        bert_params.append(name)
-
-# print('vit:')
 roberta_params = []
 roberta_shapes = []
 roberta_total_params = 0
-for name, param in vit_model.named_parameters():
+for name, param in roberta_model.named_parameters():
     if param.requires_grad:
         # print(str(name))
         start = 1
@@ -38,19 +24,33 @@ for name, param in vit_model.named_parameters():
         roberta_total_params += start
         roberta_params.append(name)
 
-for i in range(5, len(bert_params)):
-    if bert_params[i] == roberta_params[i-1]:
-        print(bert_params[i])
-        print(bert_shapes[i])
-        print(roberta_params[i-1])
-        print(roberta_shapes[i-1])
+# print('vit:')
+vit_params = []
+vit_shapes = []
+vit_total_params = 0
+for name, param in vit_model.named_parameters():
+    if param.requires_grad:
+        # print(str(name))
+        start = 1
+        vit_shapes.append(param.data.size())
+        for elem in list(param.data.size()):
+            start *= elem
+        vit_total_params += start
+        vit_params.append(name)
+
+for i in range(5, len(roberta_params)):
+    if roberta_params[i] == vit_params[i-1]:
+        print(roberta_params[i])
+        print(roberta_shapes[i])
+        print(vit_params[i-1])
+        print(vit_shapes[i-1])
         print()
 
-# for bert_param, roberta_param, bert_shape, roberta_shape in zip(bert_params, roberta_params, bert_shapes, roberta_shapes):
-#     if bert_shape != roberta_shape:
+# for bert_param, vit_param, bert_shape, vit_shape in zip(bert_params, vit_params, bert_shapes, vit_shapes):
+#     if bert_shape != vit_shape:
 #         print('Mismatch!!')
 #         print(bert_shape)
-#         print(roberta_shape)
+#         print(vit_shape)
 #         print(bert_param)
-#         print(roberta_param)
+#         print(vit_param)
 #         print()
