@@ -6,7 +6,8 @@ from pprint import pprint
 
 configuration = RobertaConfig()
 roberta_model = TFAutoModelForSequenceClassification.from_pretrained(
-    '/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt',
+    # '/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt',
+    'textattack/roberta-base-RTE',
     from_pt=True)
 roberta_layers = roberta_model.layers[0]
 vit_model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from_pt=True)
