@@ -15,6 +15,7 @@ vit_layers = vit_model.layers[0]
 
 print('roberta layers:')
 print(roberta_layers)
+print(roberta_model.named_parameters())
 print('vit layers:')
 print(vit_layers)
 
