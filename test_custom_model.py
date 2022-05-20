@@ -4,6 +4,10 @@ os.environ['TRANSFORMERS_CACHE'] = '/home/acd13578qu/data/.cache/huggingface'
 from transformers import RobertaConfig, RobertaModel, ViTFeatureExtractor, ViTModel, TFAutoModelForSequenceClassification, AutoTokenizer, TFViTModel
 from pprint import pprint
 
+
+# TODO: Need to figure out how to view all the Tf layers
+# This will let me see if they're in the right order/etc
+
 configuration = RobertaConfig()
 roberta_model = TFAutoModelForSequenceClassification.from_pretrained(
     # '/home/acd13578qu/scratch/roberta_actual/checkpoints/checkpoint_best.pt',
@@ -14,12 +18,12 @@ vit_model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from
 vit_layers = vit_model.layers[0]
 
 print('roberta layers:')
-print(roberta_layers)
+print(roberta_layers.encoder)
 # pprint(dir(roberta_model))
-pprint(dir(roberta_layers))
-print(roberta_model.summary())
-print('vit layers:')
-print(vit_layers)
+# pprint(dir(roberta_layers))
+# print(roberta_model.summary())
+# print('vit layers:')
+# print(vit_layers)
 
 # # print('roberta:')
 # roberta_params = []
