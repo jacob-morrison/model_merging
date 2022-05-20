@@ -18,9 +18,9 @@ vit_model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from
 vit_layers = vit_model.layers[0]
 
 print('roberta layers:')
-print(roberta_layers.encoder.layer.summary())
+print(roberta_layers.encoder.summary())
 print(len(roberta_layers.encoder.layer))
-print(vit_layers.encoder.layer.summary())
+print(vit_layers.encoder.summary())
 print(len(vit_layers.encoder.layer))
 # pprint(dir(roberta_model))
 # pprint(dir(roberta_layers))
