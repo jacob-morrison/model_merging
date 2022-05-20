@@ -160,16 +160,17 @@ def generate_merged_for_coeffs_set(
         # Make sure that all of the variable lists contain exactly the same number
         # of variables.
 
-        for v in variables_to_merge:
-            print(len(v))
-        for m in mergeable_models:
-            print(m.summary())
-            print(m.layers)
-        print(len(output_variables))
-        print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
-        assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
-
+        # for v in variables_to_merge:
+            # print(len(v))
+        # for m in mergeable_models:
+            # print(m.summary())
+            # print(m.layers)
+        # print(len(output_variables))
+        # print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
+        
         merging_roberta_and_vit = True
+        assert merging_roberta_and_vit or (len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1)
+
         if merging_roberta_and_vit:
             _merge_with_coeffs_roberta_and_vit(
                 output_variables,
