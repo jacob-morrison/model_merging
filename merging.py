@@ -70,6 +70,49 @@ def _merge_with_coeffs(
         lhs = tf.reduce_sum(lhs, axis=0)
         var.assign(rhs / lhs)
 
+def _merge_with_coeffs_roberta_and_vit(
+    mergeable_models,
+    coefficients: Sequence[float],
+    fishers=None,
+    fisher_floor: float = 1e-6,
+    favor_target_model=True,
+    normalization_constants=None,
+):
+    n_models = len(mergeable_models)
+    assert len(coefficients) == n_models
+
+    if fishers is None:
+        fishers = n_models * [1.0]
+    else:
+        assert len(fishers) == n_models
+
+    if normalization_constants is not None:
+        assert len(normalization_constants) == n_models
+        coefficients = [w / n for w, n in zip(coefficients, normalization_constants)]
+
+    roberta_model = mergeable_models[0]
+    vit_model = mergeable_models[1]
+
+    # for i, var in enumerate(output_variables):
+    for roberta_layer, vit_layer in zip(
+            roberta_model.layers[0].encoder.layer,
+            vit_model.layers[0].encoder.layer
+        ):
+        variables_to_merge = [roberta_layer.trainable_variables, vit_layer.trainable_variables]
+        lhs, rhs = [], []
+        for j, (mvars, coeff, fisher) in enumerate(
+            zip(variables_to_merge, coefficients, fishers)
+        ):
+            diag = fisher if isinstance(fisher, float) else fisher[i]
+            if not favor_target_model or j == 0:
+                diag = tf.maximum(diag, fisher_floor)
+            tmp = coeff * diag
+            lhs.append(tmp)
+            rhs.append(tmp * mvars)
+        rhs = tf.reduce_sum(rhs, axis=0)
+        lhs = tf.reduce_sum(lhs, axis=0)
+        roberta_layer.trainable_variables.assign(rhs / lhs)
+
 
 def _l2_norm_of_fisher(fisher):
     norm_const = tf.reduce_sum([tf.reduce_sum(tf.square(d)) for d in fisher])
@@ -126,15 +169,27 @@ def generate_merged_for_coeffs_set(
         print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
         assert len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1
 
-        _merge_with_coeffs(
-            output_variables,
-            variables_to_merge,
-            coefficients=coefficients,
-            fishers=fishers,
-            fisher_floor=fisher_floor,
-            favor_target_model=favor_target_model,
-            normalization_constants=norm_constants,
-        )
+        merging_roberta_and_vit = True
+        if merging_roberta_and_vit:
+            _merge_with_coeffs_roberta_and_vit(
+                output_variables,
+                variables_to_merge,
+                coefficients=coefficients,
+                fishers=fishers,
+                fisher_floor=fisher_floor,
+                favor_target_model=favor_target_model,
+                normalization_constants=norm_constants,
+            )
+
+        else:
+            _merge_with_coeffs(
+                mergeable_models,
+                coefficients=coefficients,
+                fishers=fishers,
+                fisher_floor=fisher_floor,
+                favor_target_model=favor_target_model,
+                normalization_constants=norm_constants,
+            )
         yield coefficients, output_model
         # print(mergeable_models[0].bert.encoder.layer[0])
         # print(output_model.encoder.layer[0])
