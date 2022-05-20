@@ -17,10 +17,13 @@ roberta_layers = roberta_model.layers[0].encoder.layer
 vit_model = TFViTModel.from_pretrained('google/vit-base-patch16-224-in21k', from_pt=True)
 vit_layers = vit_model.layers[0].encoder.layer
 
-for roberta_var, vit_var in zip(roberta_layers[0].trainable_variables, vit_layers[0].trainable_variables):
-    print(roberta_var.shape)
-    print(vit_var.shape)
-    print()
+# for roberta_var, vit_var in zip(roberta_layers[0].trainable_variables, vit_layers[0].trainable_variables):
+    # print(roberta_var.shape)
+    # print(vit_var.shape)
+    # print()
+
+print(roberta_layers[0].attention.self_attention.key.trainable_variables.shape)
+print(vit_layers[0].attention.self_attention.key.trainable_variables.shape)
 
 # print('roberta layers:')
 # print(len(roberta_layers.trainable_variables))
