@@ -28,8 +28,8 @@ print(roberta_layers[0].attention.self_attention.key.trainable_variables[1].shap
 print(vit_layers[0].attention.self_attention.key.trainable_variables[1].shape)
 print(len(roberta_layers[0].attention.self_attention.value.trainable_variables))
 print(len(vit_layers[0].attention.self_attention.value.trainable_variables))
-print(roberta_layers[0].attention.self_attention.value.trainable_variables[0].shape)
-print(vit_layers[0].attention.self_attention.value.trainable_variables[0].shape)
+print(roberta_layers[0].attention.self_attention.value.trainable_variables[1].shape)
+print(vit_layers[0].attention.self_attention.value.trainable_variables[1].shape)
 
 # print('roberta layers:')
 # print(len(roberta_layers.trainable_variables))
