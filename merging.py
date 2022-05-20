@@ -119,7 +119,7 @@ def _merge_with_coeffs_roberta_and_vit(
                 rhs.append(tmp * mvars[i])
             rhs = tf.reduce_sum(rhs, axis=0)
             lhs = tf.reduce_sum(lhs, axis=0)
-            var.trainable_variables.assign(rhs / lhs)
+            var.assign(rhs / lhs)
 
 
 def _l2_norm_of_fisher(fisher):
