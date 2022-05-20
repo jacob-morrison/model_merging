@@ -131,6 +131,91 @@ def _merge_with_coeffs_roberta_and_vit(
             lhs = tf.reduce_sum(lhs, axis=0)
             var.assign(rhs / lhs)
 
+def _merge_with_coeffs_roberta_and_vit_just_attention(
+    roberta_model,
+    vit_model,
+    # mergeable_models,
+    coefficients: Sequence[float],
+    fishers=None,
+    fisher_floor: float = 1e-6,
+    favor_target_model=True,
+    normalization_constants=None,
+):
+    n_models = 2 #len(2)
+    assert len(coefficients) == n_models
+
+    if fishers is None:
+        fishers = n_models * [1.0]
+    else:
+        assert len(fishers) == n_models
+
+    if normalization_constants is not None:
+        assert len(normalization_constants) == n_models
+        coefficients = [w / n for w, n in zip(coefficients, normalization_constants)]
+
+    # roberta_model = hf_util.clone_model(mergeable_models[0])
+    # vit_model = mergeable_models[1]
+
+    # for i, var in enumerate(output_variables):
+    for roberta_layer, vit_layer in zip(
+            roberta_model.layers[0].encoder.layer,
+            vit_model.layers[0].encoder.layer
+        ):
+        # variables_to_merge = [roberta_layer.trainable_variables, vit_layer.trainable_variables]
+        merging_vars_roberta = []
+        merging_vars_vit = []
+        output_variables = [] # roberta_layer.trainable_variables
+        for roberta_var, vit_var in zip(
+                roberta_layer.attention.self_attention.key.trainable_variables,
+                vit_layer.attention.self_attention.key.trainable_variables
+            ):
+            if roberta_var.shape == vit_var.shape:
+                merging_vars_roberta.append(roberta_var)
+                merging_vars_vit.append(vit_var)
+                output_variables.append(roberta_var)
+        variables_to_merge = [merging_vars_roberta, merging_vars_vit]
+        for i, var in enumerate(output_variables):
+            lhs, rhs = [], []
+            for j, (mvars, coeff, fisher) in enumerate(
+                zip(variables_to_merge, coefficients, fishers)
+            ):
+                diag = fisher if isinstance(fisher, float) else fisher[i]
+                if not favor_target_model or j == 0:
+                    diag = tf.maximum(diag, fisher_floor)
+                tmp = coeff * diag
+                rhs.append(tmp * mvars[i])
+                lhs.append(tmp)
+            rhs = tf.reduce_sum(rhs, axis=0)
+            lhs = tf.reduce_sum(lhs, axis=0)
+            var.assign(rhs / lhs)
+
+        merging_vars_roberta = []
+        merging_vars_vit = []
+        output_variables = [] # roberta_layer.trainable_variables
+        for roberta_var, vit_var in zip(
+                roberta_layer.attention.self_attention.value.trainable_variables,
+                vit_layer.attention.self_attention.value.trainable_variables
+            ):
+            if roberta_var.shape == vit_var.shape:
+                merging_vars_roberta.append(roberta_var)
+                merging_vars_vit.append(vit_var)
+                output_variables.append(roberta_var)
+        variables_to_merge = [merging_vars_roberta, merging_vars_vit]
+        for i, var in enumerate(output_variables):
+            lhs, rhs = [], []
+            for j, (mvars, coeff, fisher) in enumerate(
+                zip(variables_to_merge, coefficients, fishers)
+            ):
+                diag = fisher if isinstance(fisher, float) else fisher[i]
+                if not favor_target_model or j == 0:
+                    diag = tf.maximum(diag, fisher_floor)
+                tmp = coeff * diag
+                rhs.append(tmp * mvars[i])
+                lhs.append(tmp)
+            rhs = tf.reduce_sum(rhs, axis=0)
+            lhs = tf.reduce_sum(lhs, axis=0)
+            var.assign(rhs / lhs)
+
 
 def _l2_norm_of_fisher(fisher):
     norm_const = tf.reduce_sum([tf.reduce_sum(tf.square(d)) for d in fisher])
@@ -190,7 +275,8 @@ def generate_merged_for_coeffs_set(
         assert merging_roberta_and_vit or (len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1)
 
         if merging_roberta_and_vit:
-            _merge_with_coeffs_roberta_and_vit(
+            # _merge_with_coeffs_roberta_and_vit(
+            _merge_with_coeffs_roberta_and_vit_just_attention(
                 output_model,
                 mergeable_models[1],
                 coefficients=coefficients,
