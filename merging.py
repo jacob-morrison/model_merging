@@ -173,8 +173,8 @@ def generate_merged_for_coeffs_set(
 
         if merging_roberta_and_vit:
             _merge_with_coeffs_roberta_and_vit(
-                output_variables,
-                variables_to_merge,
+                mergeable_models,
+                
                 coefficients=coefficients,
                 fishers=fishers,
                 fisher_floor=fisher_floor,
@@ -184,7 +184,8 @@ def generate_merged_for_coeffs_set(
 
         else:
             _merge_with_coeffs(
-                mergeable_models,
+                output_variables,
+                variables_to_merge,
                 coefficients=coefficients,
                 fishers=fishers,
                 fisher_floor=fisher_floor,
