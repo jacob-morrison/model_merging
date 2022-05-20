@@ -104,8 +104,16 @@ def _merge_with_coeffs_roberta_and_vit(
             roberta_model.layers[0].encoder.layer,
             vit_model.layers[0].encoder.layer
         ):
-        variables_to_merge = [roberta_layer.trainable_variables, vit_layer.trainable_variables]
-        output_variables = roberta_layer.trainable_variables
+        # variables_to_merge = [roberta_layer.trainable_variables, vit_layer.trainable_variables]
+        merging_vars_roberta = []
+        merging_vars_vit = []
+        output_variables = [] # roberta_layer.trainable_variables
+        for roberta_var, vit_var in zip(roberta_layer.trainable_variables, vit_layer.trainable_variables):
+            if roberta_var.shape == vit_var.shape:
+                merging_vars_roberta.append(roberta_var)
+                merging_vars_vit.append(vit_var)
+                output_variables.append(roberta_var)
+        variables_to_merge = [merging_vars_roberta, merging_vars_vit]
         for i, var in enumerate(output_variables):
             lhs, rhs = [], []
             for j, (mvars, coeff, fisher) in enumerate(
