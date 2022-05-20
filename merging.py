@@ -96,7 +96,7 @@ def _merge_with_coeffs_roberta_and_vit(
         assert len(normalization_constants) == n_models
         coefficients = [w / n for w, n in zip(coefficients, normalization_constants)]
 
-    roberta_model = mergeable_models[0]
+    roberta_model = hf_util.clone_model(mergeable_models[0])
     vit_model = mergeable_models[1]
 
     # for i, var in enumerate(output_variables):
@@ -190,7 +190,6 @@ def generate_merged_for_coeffs_set(
         if merging_roberta_and_vit:
             _merge_with_coeffs_roberta_and_vit(
                 mergeable_models,
-                
                 coefficients=coefficients,
                 fishers=fishers,
                 fisher_floor=fisher_floor,
