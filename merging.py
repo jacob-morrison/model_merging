@@ -271,7 +271,7 @@ def generate_merged_for_coeffs_set(
         # print(len(output_variables))
         # print(len({len(output_variables)} | set(len(v) for v in variables_to_merge)))
         
-        merging_roberta_and_vit = True
+        merging_roberta_and_vit = False
         assert merging_roberta_and_vit or (len({len(output_variables)} | set(len(v) for v in variables_to_merge)) == 1)
 
         if merging_roberta_and_vit:
