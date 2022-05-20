@@ -77,14 +77,16 @@ def _merge_with_coeffs(
 # or maybe I'm missing a small piece of how the algo works -- maybe I'm doing variables_to_merge wrong
 # ^^^ this last point might actually be the problem?
 def _merge_with_coeffs_roberta_and_vit(
-    mergeable_models,
+    roberta_model,
+    vit_model,
+    # mergeable_models,
     coefficients: Sequence[float],
     fishers=None,
     fisher_floor: float = 1e-6,
     favor_target_model=True,
     normalization_constants=None,
 ):
-    n_models = len(mergeable_models)
+    n_models = 2 #len(2)
     assert len(coefficients) == n_models
 
     if fishers is None:
@@ -96,8 +98,8 @@ def _merge_with_coeffs_roberta_and_vit(
         assert len(normalization_constants) == n_models
         coefficients = [w / n for w, n in zip(coefficients, normalization_constants)]
 
-    roberta_model = hf_util.clone_model(mergeable_models[0])
-    vit_model = mergeable_models[1]
+    # roberta_model = hf_util.clone_model(mergeable_models[0])
+    # vit_model = mergeable_models[1]
 
     # for i, var in enumerate(output_variables):
     for roberta_layer, vit_layer in zip(
@@ -123,8 +125,8 @@ def _merge_with_coeffs_roberta_and_vit(
                 if not favor_target_model or j == 0:
                     diag = tf.maximum(diag, fisher_floor)
                 tmp = coeff * diag
-                lhs.append(tmp)
                 rhs.append(tmp * mvars[i])
+                lhs.append(tmp)
             rhs = tf.reduce_sum(rhs, axis=0)
             lhs = tf.reduce_sum(lhs, axis=0)
             var.assign(rhs / lhs)
@@ -189,7 +191,8 @@ def generate_merged_for_coeffs_set(
 
         if merging_roberta_and_vit:
             _merge_with_coeffs_roberta_and_vit(
-                mergeable_models,
+                output_model,
+                mergeable_models[1],
                 coefficients=coefficients,
                 fishers=fishers,
                 fisher_floor=fisher_floor,
