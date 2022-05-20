@@ -33,7 +33,7 @@ def get_body_and_head(
     model: Union[TFBertPreTrainedModel, TFRobertaPreTrainedModel]
 ) -> tf.keras.layers.Layer: # -> Tuple[tf.keras.layers.Layer, tf.keras.layers.Layer]:
     body, *head = model.layers
-    print(body)
+    # print(body)
     return model.layers[0]
 
 
