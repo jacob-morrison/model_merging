@@ -70,6 +70,12 @@ def _merge_with_coeffs(
         lhs = tf.reduce_sum(lhs, axis=0)
         var.assign(rhs / lhs)
 
+
+# TODO: This is on the right track!!
+# I think I need to be more fine-grained about merging each layer,
+# i.e. merge individual pieces (manually?) instead of the whole layer's trainable variables at once
+# or maybe I'm missing a small piece of how the algo works -- maybe I'm doing variables_to_merge wrong
+# ^^^ this last point might actually be the problem?
 def _merge_with_coeffs_roberta_and_vit(
     mergeable_models,
     coefficients: Sequence[float],
@@ -99,19 +105,21 @@ def _merge_with_coeffs_roberta_and_vit(
             vit_model.layers[0].encoder.layer
         ):
         variables_to_merge = [roberta_layer.trainable_variables, vit_layer.trainable_variables]
-        lhs, rhs = [], []
-        for j, (mvars, coeff, fisher) in enumerate(
-            zip(variables_to_merge, coefficients, fishers)
-        ):
-            diag = fisher if isinstance(fisher, float) else fisher[i]
-            if not favor_target_model or j == 0:
-                diag = tf.maximum(diag, fisher_floor)
-            tmp = coeff * diag
-            lhs.append(tmp)
-            rhs.append(tmp * mvars)
-        rhs = tf.reduce_sum(rhs, axis=0)
-        lhs = tf.reduce_sum(lhs, axis=0)
-        roberta_layer.trainable_variables.assign(rhs / lhs)
+        output_variables = roberta_layer.trainable_variables
+        for i, var in enumerate(output_variables):
+            lhs, rhs = [], []
+            for j, (mvars, coeff, fisher) in enumerate(
+                zip(variables_to_merge, coefficients, fishers)
+            ):
+                diag = fisher if isinstance(fisher, float) else fisher[i]
+                if not favor_target_model or j == 0:
+                    diag = tf.maximum(diag, fisher_floor)
+                tmp = coeff * diag
+                lhs.append(tmp)
+                rhs.append(tmp * mvars[i])
+            rhs = tf.reduce_sum(rhs, axis=0)
+            lhs = tf.reduce_sum(lhs, axis=0)
+            roberta_layer.trainable_variables.assign(rhs / lhs)
 
 
 def _l2_norm_of_fisher(fisher):
